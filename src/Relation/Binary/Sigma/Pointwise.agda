@@ -33,14 +33,18 @@ import Relation.Binary.PropositionalEquality as P
 
 infixr 4 _,_
 
-data REL {a₁ a₂ b₁ b₂ ℓ₁ ℓ₂}
-         {A₁ : Set a₁} (B₁ : A₁ → Set b₁)
-         {A₂ : Set a₂} (B₂ : A₂ → Set b₂)
-         (_R₁_ : B.REL A₁ A₂ ℓ₁) (_R₂_ : I.REL B₁ B₂ ℓ₂) :
-         B.REL (Σ A₁ B₁) (Σ A₂ B₂) (a₁ ⊔ a₂ ⊔ b₁ ⊔ b₂ ⊔ ℓ₁ ⊔ ℓ₂) where
-  _,_ : {x₁ : A₁} {y₁ : B₁ x₁} {x₂ : A₂} {y₂ : B₂ x₂}
-        (x₁Rx₂ : x₁ R₁ x₂) (y₁Ry₂ : y₁ R₂ y₂) →
-        REL B₁ B₂ _R₁_ _R₂_ (x₁ , y₁) (x₂ , y₂)
+record REL {a₁ a₂ b₁ b₂ ℓ₁ ℓ₂}
+           {A₁ : Set a₁} (B₁ : A₁ → Set b₁)
+           {A₂ : Set a₂} (B₂ : A₂ → Set b₂)
+           (_R₁_ : B.REL A₁ A₂ ℓ₁) (_R₂_ : I.REL B₁ B₂ ℓ₂)
+           (xy₁ : Σ A₁ B₁) (xy₂ : Σ A₂ B₂)
+           : Set (a₁ ⊔ a₂ ⊔ b₁ ⊔ b₂ ⊔ ℓ₁ ⊔ ℓ₂) where
+  constructor _,_
+  field
+    proj₁ : proj₁ xy₁ R₁ proj₁ xy₂
+    proj₂ : proj₂ xy₁ R₂ proj₂ xy₂
+
+open REL public
 
 Rel : ∀ {a b ℓ₁ ℓ₂} {A : Set a} (B : A → Set b)
       (_R₁_ : B.Rel A ℓ₁) (_R₂_ : I.Rel B ℓ₂) → B.Rel (Σ A B) _
