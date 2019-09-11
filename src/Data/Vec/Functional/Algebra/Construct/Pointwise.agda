@@ -2,6 +2,7 @@
 -- The Agda standard library
 --
 -- zipWith preserves various algebraic properties, up to Pointwise equality
+-- Note that Selective is not preserved.
 ------------------------------------------------------------------------
 
 {-# OPTIONS --without-K --safe #-}
@@ -66,25 +67,65 @@ inverse : ∀ 0# -_ _+_ → Inverse _≈_ 0# -_ _+_ → ∀ {n} →
 inverse 0# -_ _+_ (invˡ , invʳ) =
   inverseˡ 0# -_ _+_ invˡ , inverseʳ 0# -_ _+_ invʳ
 
--- LeftConical e _∙_ = ∀ x y → (x ∙ y) ≈ e → x ≈ e
--- RightConical e _∙_ = ∀ x y → (x ∙ y) ≈ e → y ≈ e
--- Conical e ∙ = (LeftConical e ∙) × (RightConical e ∙)
--- _*_ DistributesOverˡ _+_ =
---   ∀ x y z → (x * (y + z)) ≈ ((x * y) + (x * z))
--- _*_ DistributesOverʳ _+_ =
---   ∀ x y z → ((y + z) * x) ≈ ((y * x) + (z * x))
--- * DistributesOver + = (* DistributesOverˡ +) × (* DistributesOverʳ +)
--- _∙_ IdempotentOn x = (x ∙ x) ≈ x
--- Idempotent ∙ = ∀ x → ∙ IdempotentOn x
--- IdempotentFun f = ∀ x → f (f x) ≈ f x
--- Selective _∙_ = ∀ x y → (x ∙ y) ≈ x ⊎ (x ∙ y) ≈ y
--- _∙_ Absorbs _∘_ = ∀ x y → (x ∙ (x ∘ y)) ≈ x
--- Absorptive ∙ ∘ = (∙ Absorbs ∘) × (∘ Absorbs ∙)
--- Involutive f = ∀ x → f (f x) ≈ x
--- LeftCancellative _•_ = ∀ x {y z} → (x • y) ≈ (x • z) → y ≈ z
--- RightCancellative _•_ = ∀ {x} y z → (y • x) ≈ (z • x) → y ≈ z
--- Cancellative _•_ = (LeftCancellative _•_) × (RightCancellative _•_)
--- Congruent₁ f = f Preserves _≈_ ⟶ _≈_
+conicalˡ : ∀ 0# _+_ → LeftConical _≈_ 0# _+_ → ∀ {n} →
+  LeftConical (Pointwise _≈_ {n = n}) (replicate 0#) (zipWith _+_)
+conicalˡ _ _ con xs ys qs i = con (xs i) (ys i) (qs i)
+
+conicalʳ : ∀ 0# _+_ → RightConical _≈_ 0# _+_ → ∀ {n} →
+  RightConical (Pointwise _≈_ {n = n}) (replicate 0#) (zipWith _+_)
+conicalʳ _ _ con xs ys qs i = con (xs i) (ys i) (qs i)
+
+conical : ∀ 0# _+_ → Conical _≈_ 0# _+_ → ∀ {n} →
+  Conical (Pointwise _≈_ {n = n}) (replicate 0#) (zipWith _+_)
+conical 0# _+_ (conˡ , conʳ) = conicalˡ 0# _+_ conˡ , conicalʳ 0# _+_ conʳ
+
+distribˡ : ∀ _*_ _+_ → _DistributesOverˡ_ _≈_ _*_ _+_ → ∀ {n} →
+  _DistributesOverˡ_ (Pointwise _≈_ {n = n}) (zipWith _*_) (zipWith _+_)
+distribˡ _ _ d xs ys zs i = d (xs i) (ys i) (zs i)
+
+distribʳ : ∀ _*_ _+_ → _DistributesOverʳ_ _≈_ _*_ _+_ → ∀ {n} →
+  _DistributesOverʳ_ (Pointwise _≈_ {n = n}) (zipWith _*_) (zipWith _+_)
+distribʳ _ _ d xs ys zs i = d (xs i) (ys i) (zs i)
+
+distrib : ∀ _*_ _+_ → _DistributesOver_ _≈_ _*_ _+_ → ∀ {n} →
+  _DistributesOver_ (Pointwise _≈_ {n = n}) (zipWith _*_) (zipWith _+_)
+distrib _*_ _+_ (dˡ , dʳ) = distribˡ _*_ _+_ dˡ , distribʳ _*_ _+_ dʳ
+
+idempotent-on : ∀ _∙_ x → _IdempotentOn_ _≈_ _∙_ x → ∀ {n} →
+  _IdempotentOn_ (Pointwise _≈_ {n = n}) (zipWith _∙_) (replicate x)
+idempotent-on _ _ ide i = ide
+
+idem₂ : ∀ _∙_ → Idempotent _≈_ _∙_ → ∀ {n} →
+  Idempotent (Pointwise _≈_ {n = n}) (zipWith _∙_)
+idem₂ _∙_ ide xs i = idempotent-on _∙_ (xs i) (ide (xs i)) i
+
+idem₁ : ∀ f → IdempotentFun _≈_ f → ∀ {n} →
+  IdempotentFun (Pointwise _≈_ {n = n}) (map f)
+idem₁ _ ide xs i = ide (xs i)
+
+absorbs : ∀ _∙_ _∘_ → _Absorbs_ _≈_ _∙_ _∘_ → ∀ {n} →
+  _Absorbs_ (Pointwise _≈_ {n = n}) (zipWith _∙_) (zipWith _∘_)
+absorbs _ _ abs xs ys i = abs (xs i) (ys i)
+
+absorptive : ∀ _∙_ _∘_ → Absorptive _≈_ _∙_ _∘_ → ∀ {n} →
+  Absorptive (Pointwise _≈_ {n = n}) (zipWith _∙_) (zipWith _∘_)
+absorptive _∙_ _∘_ (abs , abs′) = absorbs _∙_ _∘_ abs , absorbs _∘_ _∙_ abs′
+
+involutive : ∀ f → Involutive _≈_ f → ∀ {n} →
+  Involutive (Pointwise _≈_ {n = n}) (map f)
+involutive _ invo xs i = invo (xs i)
+
+cancelˡ : ∀ _+_ → LeftCancellative _≈_ _+_ → ∀ {n} →
+  LeftCancellative (Pointwise _≈_ {n = n}) (zipWith _+_)
+cancelˡ _ can xs qs i = can (xs i) (qs i)
+
+cancelʳ : ∀ _+_ → RightCancellative _≈_ _+_ → ∀ {n} →
+  RightCancellative (Pointwise _≈_ {n = n}) (zipWith _+_)
+cancelʳ _ can ys zs qs i = can (ys i) (zs i) (qs i)
+
+cancel : ∀ _+_ → Cancellative _≈_ _+_ → ∀ {n} →
+  Cancellative (Pointwise _≈_ {n = n}) (zipWith _+_)
+cancel _+_ (canˡ , canʳ) = cancelˡ _+_ canˡ , cancelʳ _+_ canʳ
 
 congˡ : ∀ _∙_ → LeftCongruent _≈_ _∙_ → ∀ {n} →
   LeftCongruent (Pointwise _≈_ {n = n}) (zipWith _∙_)
