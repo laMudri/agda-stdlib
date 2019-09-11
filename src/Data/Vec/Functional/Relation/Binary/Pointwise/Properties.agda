@@ -45,6 +45,13 @@ module _ {R : Rel A ℓ} where
   decidable : Decidable R → ∀ {n} → Decidable (Pointwise R {n = n})
   decidable r? xs ys = all? λ i → r? (xs i) (ys i)
 
+  isEquivalence : IsEquivalence R → ∀ {n} → IsEquivalence (Pointwise R {n = n})
+  isEquivalence isEquivalenceR = record
+    { refl  = refl (IsEquivalence.refl isEquivalenceR)
+    ; sym   = sym (IsEquivalence.sym isEquivalenceR)
+    ; trans = trans (IsEquivalence.trans isEquivalenceR)
+    }
+
 ------------------------------------------------------------------------
 -- map
 
