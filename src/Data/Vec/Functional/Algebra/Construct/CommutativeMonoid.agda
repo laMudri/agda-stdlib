@@ -33,22 +33,24 @@ commutativeMonoid {n} = record
     }
   }
 
-∑-homo-0 : ∀ {n} → Homomorphic₀ {n} (foldr _∙_ ε) (replicate ε) ε
+∑ = foldr _∙_ ε
+
+∑-homo-0 : ∀ {n} → Homomorphic₀ {n} ∑ (replicate ε) ε
 ∑-homo-0 {zero} = refl
 ∑-homo-0 {suc n} = trans (identityˡ _) (∑-homo-0 {n})
 
-∑-homo-+ : ∀ {n} → Homomorphic₂ {n} (foldr _∙_ ε) (zipWith _∙_) _∙_
+∑-homo-+ : ∀ {n} → Homomorphic₂ {n} ∑ (zipWith _∙_) _∙_
 ∑-homo-+ {zero} xs ys = sym (identityˡ ε)
 ∑-homo-+ {suc n} xs ys = begin
-  (head xs ∙ head ys) ∙ foldr _∙_ ε (zipWith _∙_ (tail xs) (tail ys))
+  (head xs ∙ head ys) ∙ ∑ (zipWith _∙_ (tail xs) (tail ys))
     ≈⟨ ∙-cong refl (∑-homo-+ {n} (tail xs) (tail ys)) ⟩
-  (head xs ∙ head ys) ∙ (foldr _∙_ ε (tail xs) ∙ foldr _∙_ ε (tail ys))
-    ≈⟨ rearr _ _ _ _ ⟩
-  (head xs ∙ foldr _∙_ ε (tail xs)) ∙ (head ys ∙ foldr _∙_ ε (tail ys))
+  (head xs ∙ head ys) ∙ (∑ (tail xs) ∙ ∑ (tail ys))
+    ≈⟨ exchange _ _ _ _ ⟩
+  (head xs ∙ ∑ (tail xs)) ∙ (head ys ∙ ∑ (tail ys))
     ∎
   where
-  rearr : ∀ w x y z → (w ∙ x) ∙ (y ∙ z) ≈ (w ∙ y) ∙ (x ∙ z)
-  rearr w x y z = begin
+  exchange : ∀ w x y z → (w ∙ x) ∙ (y ∙ z) ≈ (w ∙ y) ∙ (x ∙ z)
+  exchange w x y z = begin
     (w ∙ x) ∙ (y ∙ z)  ≈⟨ assoc _ _ _ ⟩
     w ∙ (x ∙ (y ∙ z))  ≈⟨ ∙-cong refl (sym (assoc _ _ _)) ⟩
     w ∙ ((x ∙ y) ∙ z)  ≈⟨ ∙-cong refl (∙-cong (comm _ _) refl) ⟩

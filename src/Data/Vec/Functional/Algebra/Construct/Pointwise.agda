@@ -8,18 +8,17 @@
 {-# OPTIONS --without-K --safe #-}
 
 open import Relation.Binary
-open import Algebra.FunctionProperties
 
 module Data.Vec.Functional.Algebra.Construct.Pointwise
-  {a ℓ} {A : Set a} (_≈_ : Rel A ℓ) where
+  {a ℓ} {A : Set a} (_≈_ : Rel A ℓ)
+  where
 
--- open import Algebra
+open import Algebra.FunctionProperties
 open import Data.Fin as F using (Fin)
 open import Data.Nat as N using (ℕ)
 open import Data.Product as Σ using (_,_; proj₁; proj₂)
 open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise hiding (map)
-open import Level using (Level)
 
 assoc : ∀ _+_ → Associative _≈_ _+_ → ∀ {n} →
   Associative (Pointwise _≈_ {n = n}) (zipWith _+_)
