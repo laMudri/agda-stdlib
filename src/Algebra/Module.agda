@@ -104,6 +104,9 @@ record _─Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr
             (M-trans (*ₗ-cong (*-comm _ _) M-refl)
                      (*ₗ-assoc y x m))
 
+  *ᵣ-comm : R.Commutative _*ᵣ_
+  *ᵣ-comm m x y = *ₗ-comm y x m
+
   rightSemimodule : Right semiring ─Semimodule m ℓm
   rightSemimodule = record
     { Carrierᴹ = Carrierᴹ
@@ -122,3 +125,7 @@ record _─Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr
       ; *ᵣ-distribʳ = λ m n x → *ₗ-distribˡ x m n
       }
     }
+
+  open Right_─Semimodule rightSemimodule public
+    using ( *ᵣ-cong; *ᵣ-zeroʳ; *ᵣ-distribˡ; *ᵣ-identityʳ; *ᵣ-assoc; *ᵣ-zeroˡ
+          ; *ᵣ-distribʳ)
