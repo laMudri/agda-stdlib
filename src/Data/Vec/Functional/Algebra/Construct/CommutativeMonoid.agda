@@ -12,6 +12,8 @@ module Data.Vec.Functional.Algebra.Construct.CommutativeMonoid {c ℓ} (elemComm
 
 open import Algebra.Morphism
 open import Algebra.Structures
+import Algebra.FunctionProperties.Module.Left as LModProp
+import Algebra.FunctionProperties.Module.Right as RModProp
 open import Data.Nat
 open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
@@ -24,15 +26,13 @@ private
   open module Dummy {n} = Definitions (Vector Carrier n) Carrier _≈_
 
 open MkMonoid Elem.monoid public
-  renaming
-    ( scaleₗ           to scale
-    ; scaleₗ-assoc     to scale-assoc
-    ; scaleₗ-identityˡ to scale-identityˡ
-    ; scaleₗ-identityʳ to scale-identityʳ
-    )
 open Reasoning setoid
 
 module _ {n : ℕ} where
+
+  private
+    module L = LModProp _≈_ (_≈̇_ {n = n})
+    module R = RModProp _≈_ (_≈̇_ {n = n})
 
   isCommutativeMonoid : IsCommutativeMonoid {A = Vector Carrier n} _ _ _
   isCommutativeMonoid = record
@@ -47,15 +47,27 @@ module _ {n : ℕ} where
     ; isCommutativeMonoid = isCommutativeMonoid
     }
 
-  scale-comm : ∀ x y → (xs : Vector Carrier n) →
-               scale x (scale y xs) ≈̇ scale y (scale x xs)
-  scale-comm x y xs i = begin
-    scale x (scale y xs) i ≡⟨⟩
+  scaleₗ-comm : L.Commutative scaleₗ
+  scaleₗ-comm x y xs i = begin
+    scaleₗ x (scaleₗ y xs) i ≡⟨⟩
     x ∙ (y ∙ xs i)         ≈⟨ sym (assoc _ _ _) ⟩
     (x ∙ y) ∙ xs i         ≈⟨ ∙-cong (comm _ _) refl ⟩
     (y ∙ x) ∙ xs i         ≈⟨ assoc _ _ _ ⟩
     y ∙ (x ∙ xs i)         ≡⟨⟩
-    scale y (scale x xs) i ∎
+    scaleₗ y (scaleₗ x xs) i ∎
+
+  scaleᵣ-comm : R.Commutative scaleᵣ
+  scaleᵣ-comm xs x y i = begin
+    scaleᵣ (scaleᵣ xs x) y i ≡⟨⟩
+    (xs i ∙ x) ∙ y          ≈⟨ assoc _ _ _ ⟩
+    xs i ∙ (x ∙ y)          ≈⟨ ∙-cong refl (comm _ _) ⟩
+    xs i ∙ (y ∙ x)          ≈⟨ sym (assoc _ _ _) ⟩
+    (xs i ∙ y) ∙ x          ≡⟨⟩
+    scaleᵣ (scaleᵣ xs y) x i ∎
+
+  scaleₗ≡scaleᵣ : (x : Carrier) (xs : Vector Carrier n) →
+                  scaleₗ x xs ≈̇ scaleᵣ xs x
+  scaleₗ≡scaleᵣ x xs i = comm x (xs i)
 
 ∑ = foldr _∙_ ε
 

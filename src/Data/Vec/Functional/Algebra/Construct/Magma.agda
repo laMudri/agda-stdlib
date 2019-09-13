@@ -12,6 +12,8 @@ module Data.Vec.Functional.Algebra.Construct.Magma {c ℓ} (elemMagma : Magma c 
 
 open import Algebra.Structures
 open import Algebra.FunctionProperties.Core
+import Algebra.FunctionProperties.Module.Left as LModProp
+import Algebra.FunctionProperties.Module.Right as RModProp
 open import Data.Nat
 open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
@@ -30,6 +32,10 @@ module _ {n : ℕ} where
   _∙̇_ : Op₂ (Vector Carrier n)
   _∙̇_ = zipWith _∙_
 
+  private
+    module L = LModProp _≈_ _≈̇_
+    module R = RModProp _≈_ _≈̇_
+
   isMagma : IsMagma {A = Vector Carrier n} _ _
   isMagma = record
     { isEquivalence = Pointwise.isEquivalence isEquivalence
@@ -44,5 +50,14 @@ module _ {n : ℕ} where
     ; isMagma = isMagma
     }
 
-  scaleₗ : Carrier → Vector Carrier n → Vector Carrier n
+  scaleₗ : L.Opₗ Carrier (Vector Carrier n)
   scaleₗ x xs = map (x ∙_) xs
+
+  scaleₗ-cong : L.Congruent scaleₗ
+  scaleₗ-cong p ps i = ∙-cong p (ps i)
+
+  scaleᵣ : R.Opᵣ Carrier (Vector Carrier n)
+  scaleᵣ xs x = map (_∙ x) xs
+
+  scaleᵣ-cong : R.Congruent scaleᵣ
+  scaleᵣ-cong ps p i = ∙-cong (ps i) p

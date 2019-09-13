@@ -11,6 +11,8 @@ open import Algebra
 module Data.Vec.Functional.Algebra.Construct.Monoid {c ℓ} (elemMonoid : Monoid c ℓ) where
 
 open import Algebra.Structures
+import Algebra.FunctionProperties.Module.Left as LModProp
+import Algebra.FunctionProperties.Module.Right as RModProp
 open import Data.Nat
 open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
@@ -23,6 +25,10 @@ private
 open MkSemigroup Elem.semigroup public
 
 module _ {n : ℕ} where
+
+  private
+    module L = LModProp _≈_ (_≈̇_ {n = n})
+    module R = RModProp _≈_ (_≈̇_ {n = n})
 
   ε̇ : Vector Carrier n
   ε̇ = replicate ε
@@ -40,10 +46,8 @@ module _ {n : ℕ} where
     ; isMonoid = isMonoid
     }
 
-  scaleₗ-identityˡ : ∀ (xs : Vector Carrier n) →
-                     scaleₗ ε xs ≈̇ xs
+  scaleₗ-identityˡ : L.LeftIdentity ε scaleₗ
   scaleₗ-identityˡ xs i = identityˡ (xs i)
 
-  scaleₗ-identityʳ : ∀ (x : Carrier) →
-                     scaleₗ x ε̇ ≈̇ replicate x
-  scaleₗ-identityʳ x i = identityʳ x
+  scaleᵣ-identityʳ : R.RightIdentity ε scaleᵣ
+  scaleᵣ-identityʳ xs i = identityʳ (xs i)
