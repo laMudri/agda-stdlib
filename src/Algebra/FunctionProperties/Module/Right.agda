@@ -40,7 +40,7 @@ _*_ DistributesOverˡ _+ᴬ_ ⟶ _+ᴮ_ =
 
 _DistributesOverʳ_ : Opᵣ A B → Op₂ B → Set _
 _*_ DistributesOverʳ _+_ =
-  ∀ m n x → ((m + n) * x) ≈ᴮ ((m * x) + (n * x))
+  ∀ x m n → ((m + n) * x) ≈ᴮ ((m * x) + (n * x))
 
 LeftZero : B → Opᵣ A B → Set _
 LeftZero z _∙_ = ∀ x → (z ∙ x) ≈ᴮ z

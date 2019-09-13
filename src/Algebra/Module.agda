@@ -19,6 +19,10 @@ open import Function
 open import Level
 open import Relation.Binary
 
+------------------------------------------------------------------------
+-- Left modules
+------------------------------------------------------------------------
+
 record LeftSemimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
                       : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open Semiring semiring
@@ -52,6 +56,10 @@ record LeftModule {r ℓr} (ring : Ring r ℓr) m ℓm
 
   open IsLeftModule isLeftModule public
 
+------------------------------------------------------------------------
+-- Right modules
+------------------------------------------------------------------------
+
 record RightSemimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
                        : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open Semiring semiring
@@ -67,6 +75,23 @@ record RightSemimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
     isRightSemimodule : IsRightSemimodule semiring _+ᴹ_ _*ᵣ_ 0ᴹ
 
   open IsRightSemimodule isRightSemimodule public
+
+record RightModule {r ℓr} (ring : Ring r ℓr) m ℓm
+                   : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
+  open Ring ring
+
+  field
+    Carrierᴹ : Set m
+    _≈ᴹ_ : Rel Carrierᴹ ℓm
+  open Str _≈ᴹ_
+  field
+    _+ᴹ_ : Op₂ Carrierᴹ
+    _*ᵣ_ : Opᵣ Carrier Carrierᴹ
+    0ᴹ : Carrierᴹ
+    -ᴹ_ : Op₁ Carrierᴹ
+    isRightModule : IsRightModule ring _+ᴹ_ _*ᵣ_ 0ᴹ -ᴹ_
+
+  open IsRightModule isRightModule public
 
 record Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr) m ℓm
                   : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
@@ -118,11 +143,11 @@ record Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr) m 
       { +ᴹ-isCommutativeMonoid = +ᴹ-isCommutativeMonoid
       ; *ᵣ-cong = flip *ₗ-cong
       ; *ᵣ-zeroʳ = *ₗ-zeroˡ
-      ; *ᵣ-distribˡ = λ m x y → *ₗ-distribʳ x y m
+      ; *ᵣ-distribˡ = λ m x y → *ₗ-distribʳ m x y
       ; *ᵣ-identityʳ = λ m → *ₗ-identityˡ m
       ; *ᵣ-assoc = λ m x y → M-trans (*ₗ-comm y x m) (M-sym (*ₗ-assoc x y m))
       ; *ᵣ-zeroˡ = *ₗ-zeroʳ
-      ; *ᵣ-distribʳ = λ m n x → *ₗ-distribˡ x m n
+      ; *ᵣ-distribʳ = λ x m n → *ₗ-distribˡ x m n
       }
     }
 

@@ -100,3 +100,25 @@ module _ {r ℓr} (ring : Ring r ℓr) where
       using ()
       renaming (inverseˡ to +ᴹ-inverseˡ; inverseʳ to +ᴹ-inverseʳ
                ; uniqueˡ-⁻¹ to uniqueˡ‿-ᴹ ; uniqueʳ-⁻¹ to uniqueʳ‿-ᴹ)
+
+  record IsRightModule (+ᴹ : Op₂ M) (*ᵣ : Opᵣ R M) (0ᴹ : M) (-ᴹ : Op₁ M)
+                       : Set (r ⊔ m ⊔ ℓr ⊔ ℓm) where
+    open FP _≈ᴹ_
+    field
+      isRightSemimodule : IsRightSemimodule semiring +ᴹ *ᵣ 0ᴹ
+      -ᴹ‿cong : Congruent₁ -ᴹ
+      +ᴹ-inverse : Inverse 0ᴹ -ᴹ +ᴹ
+
+    open IsRightSemimodule isRightSemimodule public
+
+    +ᴹ-isGroup : IsGroup _≈ᴹ_ +ᴹ 0ᴹ -ᴹ
+    +ᴹ-isGroup = record
+      { isMonoid = +ᴹ-isMonoid
+      ; inverse = +ᴹ-inverse
+      ; ⁻¹-cong = -ᴹ‿cong
+      }
+
+    open IsGroup +ᴹ-isGroup public
+      using ()
+      renaming (inverseˡ to +ᴹ-inverseˡ; inverseʳ to +ᴹ-inverseʳ
+               ; uniqueˡ-⁻¹ to uniqueˡ‿-ᴹ ; uniqueʳ-⁻¹ to uniqueʳ‿-ᴹ)
