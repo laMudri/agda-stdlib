@@ -11,6 +11,7 @@ open import Algebra
 module Data.Vec.Functional.Algebra.Construct.Group {c ℓ} (elemGroup : Group c ℓ) where
 
 open import Algebra.Structures
+import Algebra.FunctionProperties as FP
 open import Data.Nat
 open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
@@ -23,6 +24,8 @@ private
 open MkMonoid Elem.monoid public
 
 module _ {n : ℕ} where
+
+  open FP {A = Vector Carrier n} _≈̇_
 
   _⁻̇¹ : Vector Carrier n → Vector Carrier n
   _⁻̇¹ = map _⁻¹
@@ -40,3 +43,5 @@ module _ {n : ℕ} where
     ; isGroup = isGroup
     }
 
+  ⁻̇¹-cong : Congruent₁ _⁻̇¹
+  ⁻̇¹-cong ps i = ⁻¹-cong (ps i)

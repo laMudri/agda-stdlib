@@ -247,7 +247,7 @@ record Module {r ℓr} (commutativeRing : CommutativeRing r ℓr) m ℓm
       ; *ᵣ-distribʳ = *ᵣ-distribʳ
       }
     ; -ᴹ‿cong = -ᴹ‿cong
-    ; +ᴹ-inverse = +ᴹ-inverse
+    ; -ᴹ‿inverse = -ᴹ‿inverse
     }
 
   rightModule : RightModule ring m ℓm

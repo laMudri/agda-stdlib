@@ -96,20 +96,20 @@ module _ {r ℓr} (ring : Ring r ℓr) where
     field
       isLeftSemimodule : IsLeftSemimodule semiring +ᴹ *ₗ 0ᴹ
       -ᴹ‿cong : Congruent₁ -ᴹ
-      +ᴹ-inverse : Inverse 0ᴹ -ᴹ +ᴹ
+      -ᴹ‿inverse : Inverse 0ᴹ -ᴹ +ᴹ
 
     open IsLeftSemimodule isLeftSemimodule public
 
     +ᴹ-isGroup : IsGroup _≈ᴹ_ +ᴹ 0ᴹ -ᴹ
     +ᴹ-isGroup = record
       { isMonoid = +ᴹ-isMonoid
-      ; inverse = +ᴹ-inverse
+      ; inverse = -ᴹ‿inverse
       ; ⁻¹-cong = -ᴹ‿cong
       }
 
     open IsGroup +ᴹ-isGroup public
       using ()
-      renaming (inverseˡ to +ᴹ-inverseˡ; inverseʳ to +ᴹ-inverseʳ
+      renaming (inverseˡ to -ᴹ‿inverseˡ; inverseʳ to -ᴹ‿inverseʳ
                ; uniqueˡ-⁻¹ to uniqueˡ‿-ᴹ ; uniqueʳ-⁻¹ to uniqueʳ‿-ᴹ)
 
   record IsRightModule (+ᴹ : Op₂ M) (*ᵣ : Opᵣ R M) (0ᴹ : M) (-ᴹ : Op₁ M)
@@ -118,20 +118,20 @@ module _ {r ℓr} (ring : Ring r ℓr) where
     field
       isRightSemimodule : IsRightSemimodule semiring +ᴹ *ᵣ 0ᴹ
       -ᴹ‿cong : Congruent₁ -ᴹ
-      +ᴹ-inverse : Inverse 0ᴹ -ᴹ +ᴹ
+      -ᴹ‿inverse : Inverse 0ᴹ -ᴹ +ᴹ
 
     open IsRightSemimodule isRightSemimodule public
 
     +ᴹ-isGroup : IsGroup _≈ᴹ_ +ᴹ 0ᴹ -ᴹ
     +ᴹ-isGroup = record
       { isMonoid = +ᴹ-isMonoid
-      ; inverse = +ᴹ-inverse
+      ; inverse = -ᴹ‿inverse
       ; ⁻¹-cong = -ᴹ‿cong
       }
 
     open IsGroup +ᴹ-isGroup public
       using ()
-      renaming (inverseˡ to +ᴹ-inverseˡ; inverseʳ to +ᴹ-inverseʳ
+      renaming (inverseˡ to -ᴹ‿inverseˡ; inverseʳ to -ᴹ‿inverseʳ
                ; uniqueˡ-⁻¹ to uniqueˡ‿-ᴹ ; uniqueʳ-⁻¹ to uniqueʳ‿-ᴹ)
 
 module _ {r ℓr} (commutativeRing : CommutativeRing r ℓr) where
