@@ -95,11 +95,31 @@ module _ {n : ℕ} where
     }
 
   leftSemimodule : LeftSemimodule elemSemiring c ℓ
-  leftSemimodule = record
-    { Carrierᴹ         = Vector Carrier n
-    ; _≈ᴹ_             = _≈̇_
-    ; _+ᴹ_             = _+̇_
-    ; _*ₗ_             = scaleₗ
-    ; 0ᴹ               = 0̇
-    ; isLeftSemimodule = isLeftSemimodule
+  leftSemimodule = record { isLeftSemimodule = isLeftSemimodule }
+
+  scaleᵣ-zeroʳ : R.RightZero 0# 0̇ scaleᵣ
+  scaleᵣ-zeroʳ xs i = zeroʳ (xs i)
+
+  scaleᵣ-distribˡ : scaleᵣ R.DistributesOverˡ _+_ ⟶ _+̇_
+  scaleᵣ-distribˡ xs x y i = distribˡ (xs i) x y
+
+  scaleᵣ-zeroˡ : R.LeftZero 0̇ scaleᵣ
+  scaleᵣ-zeroˡ x i = zeroˡ x
+
+  scaleᵣ-distribʳ : scaleᵣ R.DistributesOverʳ _+̇_
+  scaleᵣ-distribʳ x xs ys i = distribʳ x (xs i) (ys i)
+
+  isRightSemimodule : IsRightSemimodule elemSemiring _+̇_ scaleᵣ 0̇
+  isRightSemimodule = record
+    { +ᴹ-isCommutativeMonoid = +̇-isCommutativeMonoid
+    ; *ᵣ-cong                = scaleᵣ-cong
+    ; *ᵣ-zeroʳ               = scaleᵣ-zeroʳ
+    ; *ᵣ-distribˡ            = scaleᵣ-distribˡ
+    ; *ᵣ-identityʳ           = scaleᵣ-identityʳ
+    ; *ᵣ-assoc               = scaleᵣ-assoc
+    ; *ᵣ-zeroˡ               = scaleᵣ-zeroˡ
+    ; *ᵣ-distribʳ            = scaleᵣ-distribʳ
     }
+
+  rightSemimodule : RightSemimodule elemSemiring c ℓ
+  rightSemimodule = record { isRightSemimodule = isRightSemimodule }
