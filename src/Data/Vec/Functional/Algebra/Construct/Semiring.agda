@@ -82,7 +82,7 @@ module _ {n : ℕ} where
   scaleₗ-distribˡ : scaleₗ L.DistributesOverˡ _+̇_
   scaleₗ-distribˡ x xs ys i = distribˡ x (xs i) (ys i)
 
-  isLeftSemimodule : IsLeft elemSemiring ─Semimodule _+̇_ scaleₗ 0̇
+  isLeftSemimodule : IsLeftSemimodule elemSemiring _+̇_ scaleₗ 0̇
   isLeftSemimodule = record
     { +ᴹ-isCommutativeMonoid = +̇-isCommutativeMonoid
     ; *ₗ-cong                = scaleₗ-cong
@@ -94,7 +94,7 @@ module _ {n : ℕ} where
     ; *ₗ-distribˡ            = scaleₗ-distribˡ
     }
 
-  leftSemimodule : Left elemSemiring ─Semimodule c ℓ
+  leftSemimodule : LeftSemimodule elemSemiring c ℓ
   leftSemimodule = record
     { Carrierᴹ         = Vector Carrier n
     ; _≈ᴹ_             = _≈̇_
