@@ -5,13 +5,13 @@
 ------------------------------------------------------------------------
 
 -- This file contains some core definitions which are reexported by
--- Algebra.FunctionProperties.Double. They are placed here because
--- Algebra.FunctionProperties.Double is a parameterised module, and some of
+-- Algebra.FunctionProperties.Module. They are placed here because
+-- Algebra.FunctionProperties.Module is a parameterised module, and some of
 -- the parameters are irrelevant for these definitions.
 
 {-# OPTIONS --without-K --safe #-}
 
-module Algebra.FunctionProperties.Double.Core where
+module Algebra.FunctionProperties.Module.Core where
 
 open import Level
 

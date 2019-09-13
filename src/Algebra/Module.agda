@@ -7,12 +7,12 @@
 
 {-# OPTIONS --without-K --safe #-}
 
-module Algebra.Double2 where
+module Algebra.Module where
 
 open import Algebra
-import Algebra.Structures.Double2 as Str
+import Algebra.Structures.Module as Str
 open import Algebra.FunctionProperties.Core
-open import Algebra.FunctionProperties.Double.Core
+open import Algebra.FunctionProperties.Module.Core
 open import Function
 open import Level
 open import Relation.Binary

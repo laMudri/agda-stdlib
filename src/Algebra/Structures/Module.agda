@@ -8,17 +8,17 @@
 
 open import Relation.Binary using (Rel; Setoid; IsEquivalence)
 
-module Algebra.Structures.Double2
+module Algebra.Structures.Module
   {m ℓm} {M : Set m} (_≈ᴹ_ : Rel M ℓm)
   where
 
 open import Algebra
 open import Algebra.FunctionProperties.Core
-open import Algebra.FunctionProperties.Double.Core
+open import Algebra.FunctionProperties.Module.Core
 import Algebra.FunctionProperties as FP
 import Algebra.FunctionProperties.Consequences as Consequences
-import Algebra.FunctionProperties.Double.Left as L
-import Algebra.FunctionProperties.Double.Right as R
+import Algebra.FunctionProperties.Module.Left as L
+import Algebra.FunctionProperties.Module.Right as R
 open import Algebra.Structures
 open import Data.Product using (_,_; proj₁; proj₂)
 open import Level using (_⊔_)

@@ -13,7 +13,7 @@ open import Data.Sum
 -- The properties are parameterised by the following "equality"
 -- relations
 
-module Algebra.FunctionProperties.Double.Left
+module Algebra.FunctionProperties.Module.Left
   {a b ℓa ℓb} {A : Set a} {B : Set b} (_≈ᴬ_ : Rel A ℓa) (_≈ᴮ_ : Rel B ℓb)
   where
 
@@ -23,7 +23,7 @@ open import Data.Product
 ------------------------------------------------------------------------
 -- Binary operations
 
-open import Algebra.FunctionProperties.Double.Core public
+open import Algebra.FunctionProperties.Module.Core public
 
 ------------------------------------------------------------------------
 -- Properties of operations
