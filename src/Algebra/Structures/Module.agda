@@ -76,6 +76,17 @@ module _ {r ℓr} (semiring : Semiring r ℓr) where
                ; trans to M-trans; ∙-cong to +ᴹ-cong; ∙-congʳ to +ᴹ-congʳ
                ; ∙-congˡ to +ᴹ-congˡ)
 
+module _ {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr) where
+  open CommutativeSemiring commutativeSemiring renaming (Carrier to R)
+
+  record IsSemimodule (+ᴹ : Op₂ M) (*ₗ : Opₗ R M) (0ᴹ : M)
+                      : Set (r ⊔ m ⊔ ℓr ⊔ ℓm) where
+    field
+      isLeftSemimodule : IsLeftSemimodule semiring +ᴹ *ₗ 0ᴹ
+
+    open IsLeftSemimodule isLeftSemimodule public
+
+
 module _ {r ℓr} (ring : Ring r ℓr) where
   open Ring ring renaming (Carrier to R)
 
@@ -122,3 +133,13 @@ module _ {r ℓr} (ring : Ring r ℓr) where
       using ()
       renaming (inverseˡ to +ᴹ-inverseˡ; inverseʳ to +ᴹ-inverseʳ
                ; uniqueˡ-⁻¹ to uniqueˡ‿-ᴹ ; uniqueʳ-⁻¹ to uniqueʳ‿-ᴹ)
+
+module _ {r ℓr} (commutativeRing : CommutativeRing r ℓr) where
+  open CommutativeRing commutativeRing renaming (Carrier to R)
+
+  record IsModule (+ᴹ : Op₂ M) (*ₗ : Opₗ R M) (0ᴹ : M) (-ᴹ : Op₁ M)
+                      : Set (r ⊔ m ⊔ ℓr ⊔ ℓm) where
+    field
+      isLeftModule : IsLeftModule ring +ᴹ *ₗ 0ᴹ -ᴹ
+
+    open IsLeftModule isLeftModule public
