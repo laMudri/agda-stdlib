@@ -13,7 +13,7 @@ open import Data.Sum
 -- The properties are parameterised by the following "equality"
 -- relations
 
-module Algebra.FunctionProperties.Double.Left
+module Algebra.FunctionProperties.Double.Right
   {a b ℓa ℓb} {A : Set a} {B : Set b} (_≈ᴬ_ : Rel A ℓa) (_≈ᴮ_ : Rel B ℓb)
   where
 
@@ -28,22 +28,22 @@ open import Algebra.FunctionProperties.Double.Core public
 ------------------------------------------------------------------------
 -- Properties of operations
 
-Associative : Op₂ A → Opₗ A B → Set _
-Associative _∙ᴬ_ _∙ᴮ_ = ∀ x y m → ((x ∙ᴬ y) ∙ᴮ m) ≈ᴮ (x ∙ᴮ (y ∙ᴮ m))
+Associative : Op₂ A → Opᵣ A B → Set _
+Associative _∙ᴬ_ _∙ᴮ_ = ∀ m x y → ((m ∙ᴮ x) ∙ᴮ y) ≈ᴮ (m ∙ᴮ (x ∙ᴬ y))
 
-_DistributesOverˡ_ : Opₗ A B → Op₂ B → Set _
-_*_ DistributesOverˡ _+_ =
-  ∀ x m n → (x * (m + n)) ≈ᴮ ((x * m) + (x * n))
+_DistributesOverˡ_⟶_ : Opᵣ A B → Op₂ A → Op₂ B → Set _
+_*_ DistributesOverˡ _+ᴬ_ ⟶ _+ᴮ_ =
+  ∀ m x y → (m * (x +ᴬ y)) ≈ᴮ ((m * x) +ᴮ (m * y))
 
-_DistributesOverʳ_⟶_ : Opₗ A B → Op₂ A → Op₂ B → Set _
-_*_ DistributesOverʳ _+ᴬ_ ⟶ _+ᴮ_ =
-  ∀ m n x → ((m +ᴬ n) * x) ≈ᴮ ((m * x) +ᴮ (n * x))
+_DistributesOverʳ_ : Opᵣ A B → Op₂ B → Set _
+_*_ DistributesOverʳ _+_ =
+  ∀ m n x → ((m + n) * x) ≈ᴮ ((m * x) + (n * x))
 
-LeftZero : A → B → Opₗ A B → Set _
-LeftZero zᴬ zᴮ _∙_ = ∀ x → (zᴬ ∙ x) ≈ᴮ zᴮ
+LeftZero : B → Opᵣ A B → Set _
+LeftZero z _∙_ = ∀ x → (z ∙ x) ≈ᴮ z
 
-RightZero : B → Opₗ A B → Set _
-RightZero z _∙_ = ∀ x → (x ∙ z) ≈ᴮ z
+RightZero : A → B → Opᵣ A B → Set _
+RightZero zᴬ zᴮ _∙_ = ∀ x → (x ∙ zᴬ) ≈ᴮ zᴮ
 
-Congruent : Opₗ A B → Set _
-Congruent _∙_ = ∀ {x x′ m m′} → x ≈ᴬ x′ → m ≈ᴮ m′ → (x ∙ m) ≈ᴮ (x′ ∙ m′)
+Congruent : Opᵣ A B → Set _
+Congruent _∙_ = ∀ {m m′ x x′} → m ≈ᴮ m′ → x ≈ᴬ x′ → (m ∙ x) ≈ᴮ (m′ ∙ x′)
