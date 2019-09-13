@@ -16,14 +16,20 @@ open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
 import Data.Vec.Functional.Algebra.Construct.Pointwise as Pointwise
 import Data.Vec.Functional.Algebra.Construct.Monoid as MkMonoid
 
-open Group elemGroup
+private
+  module Elem = Group elemGroup
 
-group : ∀ {n} → Group c ℓ
-group {n} = record
-  { Carrier = Vector Carrier n
-  ; isGroup = record
-    { isMonoid = Monoid.isMonoid (MkMonoid.monoid monoid)
-    ; inverse  = Pointwise.inverse _≈_ ε _⁻¹ _∙_ inverse
-    ; ⁻¹-cong  = Pointwise.cong₁ _≈_ _⁻¹ ⁻¹-cong
+open Elem hiding (isMonoid; isGroup)
+open MkMonoid Elem.monoid public
+
+module _ {n : ℕ} where
+
+  group : Group c ℓ
+  group = record
+    { Carrier = Vector Carrier n
+    ; isGroup = record
+      { isMonoid = isMonoid
+      ; inverse  = Pointwise.inverse _≈_ ε _⁻¹ _∙_ inverse
+      ; ⁻¹-cong  = Pointwise.cong₁ _≈_ _⁻¹ ⁻¹-cong
+      }
     }
-  }
