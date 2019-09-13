@@ -19,8 +19,8 @@ open import Function
 open import Level
 open import Relation.Binary
 
-record Left_─Semimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
-                        : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
+record LeftSemimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
+                      : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open Semiring semiring
 
   field
@@ -31,12 +31,12 @@ record Left_─Semimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
     _+ᴹ_ : Op₂ Carrierᴹ
     _*ₗ_ : Opₗ Carrier Carrierᴹ
     0ᴹ : Carrierᴹ
-    isLeftSemimodule : IsLeft semiring ─Semimodule _+ᴹ_ _*ₗ_ 0ᴹ
+    isLeftSemimodule : IsLeftSemimodule semiring _+ᴹ_ _*ₗ_ 0ᴹ
 
-  open IsLeft_─Semimodule isLeftSemimodule public
+  open IsLeftSemimodule isLeftSemimodule public
 
-record Left_─Module {r ℓr} (ring : Ring r ℓr) m ℓm
-                    : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
+record LeftModule {r ℓr} (ring : Ring r ℓr) m ℓm
+                  : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open Ring ring
 
   field
@@ -48,12 +48,12 @@ record Left_─Module {r ℓr} (ring : Ring r ℓr) m ℓm
     _*ₗ_ : Opₗ Carrier Carrierᴹ
     0ᴹ : Carrierᴹ
     -ᴹ_ : Op₁ Carrierᴹ
-    isLeftModule : IsLeft ring ─Module _+ᴹ_ _*ₗ_ 0ᴹ -ᴹ_
+    isLeftModule : IsLeftModule ring _+ᴹ_ _*ₗ_ 0ᴹ -ᴹ_
 
-  open IsLeft_─Module isLeftModule public
+  open IsLeftModule isLeftModule public
 
-record Right_─Semimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
-                         : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
+record RightSemimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
+                       : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open Semiring semiring
 
   field
@@ -64,12 +64,12 @@ record Right_─Semimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
     _+ᴹ_ : Op₂ Carrierᴹ
     _*ᵣ_ : Opᵣ Carrier Carrierᴹ
     0ᴹ : Carrierᴹ
-    isRightSemimodule : IsRight semiring ─Semimodule _+ᴹ_ _*ᵣ_ 0ᴹ
+    isRightSemimodule : IsRightSemimodule semiring _+ᴹ_ _*ᵣ_ 0ᴹ
 
-  open IsRight_─Semimodule isRightSemimodule public
+  open IsRightSemimodule isRightSemimodule public
 
-record _─Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr) m ℓm
-                    : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
+record Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr) m ℓm
+                  : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open CommutativeSemiring commutativeSemiring
   infixr 7 _*ₗ_
   infixl 7 _*ᵣ_
@@ -84,15 +84,15 @@ record _─Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr
     _+ᴹ_ : Op₂ Carrierᴹ
     _*ₗ_ : Opₗ Carrier Carrierᴹ
     0ᴹ : Carrierᴹ
-    isLeftSemimodule : IsLeft semiring ─Semimodule _+ᴹ_ _*ₗ_ 0ᴹ
+    isLeftSemimodule : IsLeftSemimodule semiring _+ᴹ_ _*ₗ_ 0ᴹ
 
-  open IsLeft_─Semimodule isLeftSemimodule public
+  open IsLeftSemimodule isLeftSemimodule public
 
   private
     module L = LFP _≈_ _≈ᴹ_
     module R = RFP _≈_ _≈ᴹ_
 
-  leftSemimodule : Left semiring ─Semimodule m ℓm
+  leftSemimodule : LeftSemimodule semiring m ℓm
   leftSemimodule = record { isLeftSemimodule = isLeftSemimodule }
 
   _*ᵣ_ : Opᵣ Carrier Carrierᴹ
@@ -107,7 +107,7 @@ record _─Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr
   *ᵣ-comm : R.Commutative _*ᵣ_
   *ᵣ-comm m x y = *ₗ-comm y x m
 
-  rightSemimodule : Right semiring ─Semimodule m ℓm
+  rightSemimodule : RightSemimodule semiring m ℓm
   rightSemimodule = record
     { Carrierᴹ = Carrierᴹ
     ; _≈ᴹ_ = _≈ᴹ_
@@ -126,6 +126,6 @@ record _─Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr
       }
     }
 
-  open Right_─Semimodule rightSemimodule public
+  open RightSemimodule rightSemimodule public
     using ( *ᵣ-cong; *ᵣ-zeroʳ; *ᵣ-distribˡ; *ᵣ-identityʳ; *ᵣ-assoc; *ᵣ-zeroˡ
           ; *ᵣ-distribʳ)

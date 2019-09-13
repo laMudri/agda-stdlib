@@ -26,8 +26,8 @@ open import Level using (_⊔_)
 module _ {r ℓr} (semiring : Semiring r ℓr) where
   open Semiring semiring renaming (Carrier to R)
 
-  record IsLeft_─Semimodule (+ᴹ : Op₂ M) (*ₗ : Opₗ R M) (0ᴹ : M)
-                           : Set (r ⊔ m ⊔ ℓr ⊔ ℓm) where
+  record IsLeftSemimodule (+ᴹ : Op₂ M) (*ₗ : Opₗ R M) (0ᴹ : M)
+                          : Set (r ⊔ m ⊔ ℓr ⊔ ℓm) where
     open L _≈_ _≈ᴹ_
     field
       +ᴹ-isCommutativeMonoid : IsCommutativeMonoid _≈ᴹ_ +ᴹ 0ᴹ
@@ -51,7 +51,7 @@ module _ {r ℓr} (semiring : Semiring r ℓr) where
                ; trans to M-trans; ∙-cong to +ᴹ-cong; ∙-congʳ to +ᴹ-congʳ
                ; ∙-congˡ to +ᴹ-congˡ)
 
-  record IsRight_─Semimodule (+ᴹ : Op₂ M) (*ᵣ : Opᵣ R M) (0ᴹ : M)
+  record IsRightSemimodule (+ᴹ : Op₂ M) (*ᵣ : Opᵣ R M) (0ᴹ : M)
                            : Set (r ⊔ m ⊔ ℓr ⊔ ℓm) where
     open R _≈_ _≈ᴹ_
     field
@@ -79,15 +79,15 @@ module _ {r ℓr} (semiring : Semiring r ℓr) where
 module _ {r ℓr} (ring : Ring r ℓr) where
   open Ring ring renaming (Carrier to R)
 
-  record IsLeft_─Module (+ᴹ : Op₂ M) (*ₗ : Opₗ R M) (0ᴹ : M) (-ᴹ : Op₁ M)
-                        : Set (r ⊔ m ⊔ ℓr ⊔ ℓm) where
+  record IsLeftModule (+ᴹ : Op₂ M) (*ₗ : Opₗ R M) (0ᴹ : M) (-ᴹ : Op₁ M)
+                      : Set (r ⊔ m ⊔ ℓr ⊔ ℓm) where
     open FP _≈ᴹ_
     field
-      isLeftSemimodule : IsLeft semiring ─Semimodule +ᴹ *ₗ 0ᴹ
+      isLeftSemimodule : IsLeftSemimodule semiring +ᴹ *ₗ 0ᴹ
       -ᴹ‿cong : Congruent₁ -ᴹ
       +ᴹ-inverse : Inverse 0ᴹ -ᴹ +ᴹ
 
-    open IsLeft_─Semimodule isLeftSemimodule public
+    open IsLeftSemimodule isLeftSemimodule public
 
     +ᴹ-isGroup : IsGroup _≈ᴹ_ +ᴹ 0ᴹ -ᴹ
     +ᴹ-isGroup = record
