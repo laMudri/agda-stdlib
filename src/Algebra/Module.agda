@@ -27,6 +27,10 @@ record LeftSemimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
                       : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open Semiring semiring
 
+  infixr 7 _*ₗ_
+  infixl 6 _+ᴹ_
+  infix 4 _≈ᴹ_
+
   field
     Carrierᴹ : Set m
     _≈ᴹ_ : Rel Carrierᴹ ℓm
@@ -43,6 +47,11 @@ record LeftModule {r ℓr} (ring : Ring r ℓr) m ℓm
                   : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open Ring ring
 
+  infixr 8 -ᴹ_
+  infixr 7 _*ₗ_
+  infixl 6 _+ᴹ_
+  infix 4 _≈ᴹ_
+
   field
     Carrierᴹ : Set m
     _≈ᴹ_ : Rel Carrierᴹ ℓm
@@ -56,6 +65,9 @@ record LeftModule {r ℓr} (ring : Ring r ℓr) m ℓm
 
   open IsLeftModule isLeftModule public
 
+  leftSemimodule : LeftSemimodule semiring m ℓm
+  leftSemimodule = record { isLeftSemimodule = isLeftSemimodule }
+
 ------------------------------------------------------------------------
 -- Right modules
 ------------------------------------------------------------------------
@@ -63,6 +75,10 @@ record LeftModule {r ℓr} (ring : Ring r ℓr) m ℓm
 record RightSemimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
                        : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open Semiring semiring
+
+  infixl 7 _*ᵣ_
+  infixl 6 _+ᴹ_
+  infix 4 _≈ᴹ_
 
   field
     Carrierᴹ : Set m
@@ -80,6 +96,11 @@ record RightModule {r ℓr} (ring : Ring r ℓr) m ℓm
                    : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open Ring ring
 
+  infixr 8 -ᴹ_
+  infixl 7 _*ᵣ_
+  infixl 6 _+ᴹ_
+  infix 4 _≈ᴹ_
+
   field
     Carrierᴹ : Set m
     _≈ᴹ_ : Rel Carrierᴹ ℓm
@@ -93,9 +114,17 @@ record RightModule {r ℓr} (ring : Ring r ℓr) m ℓm
 
   open IsRightModule isRightModule public
 
+  rightSemimodule : RightSemimodule semiring m ℓm
+  rightSemimodule = record { isRightSemimodule = isRightSemimodule }
+
+------------------------------------------------------------------------
+-- Modules over commutative structures
+------------------------------------------------------------------------
+
 record Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr) m ℓm
                   : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open CommutativeSemiring commutativeSemiring
+
   infixr 7 _*ₗ_
   infixl 7 _*ᵣ_
   infixl 6 _+ᴹ_
@@ -153,4 +182,71 @@ record Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr) m 
 
   open RightSemimodule rightSemimodule public
     using ( *ᵣ-cong; *ᵣ-zeroʳ; *ᵣ-distribˡ; *ᵣ-identityʳ; *ᵣ-assoc; *ᵣ-zeroˡ
-          ; *ᵣ-distribʳ)
+          ; *ᵣ-distribʳ; isRightSemimodule)
+
+record Module {r ℓr} (commutativeRing : CommutativeRing r ℓr) m ℓm
+              : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
+  open CommutativeRing commutativeRing
+
+  infixr 8 -ᴹ_
+  infixr 7 _*ₗ_
+  infixl 6 _+ᴹ_
+  infix 4 _≈ᴹ_
+
+  field
+    Carrierᴹ : Set m
+    _≈ᴹ_ : Rel Carrierᴹ ℓm
+  open Str _≈ᴹ_
+  field
+    _+ᴹ_ : Op₂ Carrierᴹ
+    _*ₗ_ : Opₗ Carrier Carrierᴹ
+    0ᴹ : Carrierᴹ
+    -ᴹ_ : Op₁ Carrierᴹ
+    isLeftModule : IsLeftModule ring _+ᴹ_ _*ₗ_ 0ᴹ -ᴹ_
+
+  open IsLeftModule isLeftModule public
+
+  semimodule : Semimodule commutativeSemiring m ℓm
+  semimodule = record
+    { _≈ᴹ_ = _≈ᴹ_
+    ; _+ᴹ_ = _+ᴹ_
+    ; _*ₗ_ = _*ₗ_
+    ; 0ᴹ = 0ᴹ
+    ; isLeftSemimodule = record
+      { +ᴹ-isCommutativeMonoid = +ᴹ-isCommutativeMonoid
+      ; *ₗ-cong = *ₗ-cong
+      ; *ₗ-zeroˡ = *ₗ-zeroˡ
+      ; *ₗ-distribʳ = *ₗ-distribʳ
+      ; *ₗ-identityˡ = *ₗ-identityˡ
+      ; *ₗ-assoc = *ₗ-assoc
+      ; *ₗ-zeroʳ = *ₗ-zeroʳ
+      ; *ₗ-distribˡ = *ₗ-distribˡ
+      }
+    }
+
+  open Semimodule semimodule public
+    using ( leftSemimodule; isLeftSemimodule; _*ᵣ_; *ₗ-comm; *ᵣ-comm
+          ; rightSemimodule; isRightSemimodule; *ᵣ-cong; *ᵣ-zeroʳ; *ᵣ-distribˡ
+          ; *ᵣ-identityʳ; *ᵣ-assoc; *ᵣ-zeroˡ; *ᵣ-distribʳ)
+
+  leftModule : LeftModule ring m ℓm
+  leftModule = record { isLeftModule = isLeftModule }
+
+  isRightModule : IsRightModule ring _+ᴹ_ _*ᵣ_ 0ᴹ -ᴹ_
+  isRightModule = record
+    { isRightSemimodule = record
+      { +ᴹ-isCommutativeMonoid = +ᴹ-isCommutativeMonoid
+      ; *ᵣ-cong = *ᵣ-cong
+      ; *ᵣ-zeroʳ = *ᵣ-zeroʳ
+      ; *ᵣ-distribˡ = *ᵣ-distribˡ
+      ; *ᵣ-identityʳ = *ᵣ-identityʳ
+      ; *ᵣ-assoc = *ᵣ-assoc
+      ; *ᵣ-zeroˡ = *ᵣ-zeroˡ
+      ; *ᵣ-distribʳ = *ᵣ-distribʳ
+      }
+    ; -ᴹ‿cong = -ᴹ‿cong
+    ; +ᴹ-inverse = +ᴹ-inverse
+    }
+
+  rightModule : RightModule ring m ℓm
+  rightModule = record { isRightModule = isRightModule }
