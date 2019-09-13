@@ -15,23 +15,27 @@ open import Data.Nat
 open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
 import Data.Vec.Functional.Algebra.Construct.Pointwise as Pointwise
-import Data.Vec.Functional.Algebra.Construct.Semigroup as MkSemigroup
+import Data.Vec.Functional.Algebra.Construct.Monoid as MkMonoid
 import Relation.Binary.Reasoning.Setoid as Reasoning
 
-open CommutativeMonoid elemCommutativeMonoid
 private
+  open module Elem = CommutativeMonoid elemCommutativeMonoid hiding (isMonoid; isSemigroup)
   open module Dummy {n} = Definitions (Vector Carrier n) Carrier _≈_
+
+open MkMonoid Elem.monoid public
 open Reasoning setoid
 
-commutativeMonoid : ∀ {n} → CommutativeMonoid c ℓ
-commutativeMonoid {n} = record
-  { Carrier  = Vector Carrier n
-  ; isCommutativeMonoid = record
-    { isSemigroup = Semigroup.isSemigroup (MkSemigroup.semigroup semigroup)
-    ; identityˡ   = Pointwise.identityˡ _≈_ ε _∙_ identityˡ
-    ; comm        = Pointwise.comm _≈_ _∙_ comm
+module _ {n : ℕ} where
+
+  commutativeMonoid : CommutativeMonoid c ℓ
+  commutativeMonoid = record
+    { Carrier  = Vector Carrier n
+    ; isCommutativeMonoid = record
+      { isSemigroup = isSemigroup
+      ; identityˡ   = Pointwise.identityˡ _≈_ ε _∙_ identityˡ
+      ; comm        = Pointwise.comm _≈_ _∙_ comm
+      }
     }
-  }
 
 ∑ = foldr _∙_ ε
 

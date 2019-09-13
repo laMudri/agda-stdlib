@@ -14,5 +14,3 @@ open import Data.Nat
 open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
 import Data.Vec.Functional.Algebra.Construct.Pointwise as Pointwise
-
-open Semiring elemSemiring

@@ -17,9 +17,8 @@ import Data.Vec.Functional.Algebra.Construct.Pointwise as Pointwise
 import Data.Vec.Functional.Algebra.Construct.Monoid as MkMonoid
 
 private
-  module Elem = Group elemGroup
+  open module Elem = Group elemGroup hiding (isMonoid; isGroup)
 
-open Elem hiding (isMonoid; isGroup)
 open MkMonoid Elem.monoid public
 
 module _ {n : ℕ} where

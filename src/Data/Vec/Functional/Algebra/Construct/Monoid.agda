@@ -18,9 +18,8 @@ import Data.Vec.Functional.Algebra.Construct.Pointwise as Pointwise
 import Data.Vec.Functional.Algebra.Construct.Semigroup as MkSemigroup
 
 private
-  module Elem = Monoid elemMonoid
+  open module Elem = Monoid elemMonoid hiding (isSemigroup; isMonoid)
 
-open Elem hiding (isSemigroup; isMonoid)
 open MkSemigroup Elem.semigroup public
 
 module _ {n : ℕ} where

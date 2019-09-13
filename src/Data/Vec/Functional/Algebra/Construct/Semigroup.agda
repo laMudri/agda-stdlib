@@ -18,9 +18,8 @@ import Data.Vec.Functional.Algebra.Construct.Pointwise as Pointwise
 import Data.Vec.Functional.Algebra.Construct.Magma as MkMagma
 
 private
-  module Elem = Semigroup elemSemigroup
+  open module Elem = Semigroup elemSemigroup hiding (isMagma; isSemigroup)
 
-open Elem hiding (isMagma; isSemigroup)
 open MkMagma Elem.magma public
 
 module _ {n : ℕ} where

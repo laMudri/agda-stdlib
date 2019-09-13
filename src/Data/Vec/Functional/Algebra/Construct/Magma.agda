@@ -19,7 +19,8 @@ import Data.Vec.Functional.Relation.Binary.Pointwise.Properties as Pointwise
 import Data.Vec.Functional.Algebra.Construct.Pointwise as Pointwise
 open import Relation.Binary
 
-open Magma elemMagma hiding (isMagma)
+private
+  open module Elem = Magma elemMagma hiding (isMagma)
 
 module _ {n : ℕ} where
 
