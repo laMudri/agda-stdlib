@@ -24,6 +24,9 @@ open MkMonoid Elem.monoid public
 
 module _ {n : ℕ} where
 
+  _⁻̇¹ : Vector Carrier n → Vector Carrier n
+  _⁻̇¹ = map _⁻¹
+
   isGroup : IsGroup {A = Vector Carrier n} _ _ _ _
   isGroup = record
     { isMonoid = isMonoid
