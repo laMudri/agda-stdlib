@@ -138,9 +138,9 @@ record Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr) m 
     _+ᴹ_ : Op₂ Carrierᴹ
     _*ₗ_ : Opₗ Carrier Carrierᴹ
     0ᴹ : Carrierᴹ
-    isLeftSemimodule : IsLeftSemimodule semiring _+ᴹ_ _*ₗ_ 0ᴹ
+    isSemimodule : IsSemimodule commutativeSemiring _+ᴹ_ _*ₗ_ 0ᴹ
 
-  open IsLeftSemimodule isLeftSemimodule public
+  open IsSemimodule isSemimodule public
 
   private
     module L = LFP _≈_ _≈ᴹ_
@@ -202,9 +202,9 @@ record Module {r ℓr} (commutativeRing : CommutativeRing r ℓr) m ℓm
     _*ₗ_ : Opₗ Carrier Carrierᴹ
     0ᴹ : Carrierᴹ
     -ᴹ_ : Op₁ Carrierᴹ
-    isLeftModule : IsLeftModule ring _+ᴹ_ _*ₗ_ 0ᴹ -ᴹ_
+    isModule : IsModule commutativeRing _+ᴹ_ _*ₗ_ 0ᴹ -ᴹ_
 
-  open IsLeftModule isLeftModule public
+  open IsModule isModule public
 
   semimodule : Semimodule commutativeSemiring m ℓm
   semimodule = record
@@ -212,15 +212,17 @@ record Module {r ℓr} (commutativeRing : CommutativeRing r ℓr) m ℓm
     ; _+ᴹ_ = _+ᴹ_
     ; _*ₗ_ = _*ₗ_
     ; 0ᴹ = 0ᴹ
-    ; isLeftSemimodule = record
-      { +ᴹ-isCommutativeMonoid = +ᴹ-isCommutativeMonoid
-      ; *ₗ-cong = *ₗ-cong
-      ; *ₗ-zeroˡ = *ₗ-zeroˡ
-      ; *ₗ-distribʳ = *ₗ-distribʳ
-      ; *ₗ-identityˡ = *ₗ-identityˡ
-      ; *ₗ-assoc = *ₗ-assoc
-      ; *ₗ-zeroʳ = *ₗ-zeroʳ
-      ; *ₗ-distribˡ = *ₗ-distribˡ
+    ; isSemimodule = record {
+      isLeftSemimodule = record
+        { +ᴹ-isCommutativeMonoid = +ᴹ-isCommutativeMonoid
+        ; *ₗ-cong = *ₗ-cong
+        ; *ₗ-zeroˡ = *ₗ-zeroˡ
+        ; *ₗ-distribʳ = *ₗ-distribʳ
+        ; *ₗ-identityˡ = *ₗ-identityˡ
+        ; *ₗ-assoc = *ₗ-assoc
+        ; *ₗ-zeroʳ = *ₗ-zeroʳ
+        ; *ₗ-distribˡ = *ₗ-distribˡ
+        }
       }
     }
 
