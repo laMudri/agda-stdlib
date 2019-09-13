@@ -11,6 +11,7 @@ open import Algebra
 module Data.Vec.Functional.Algebra.Construct.CommutativeMonoid {c ℓ} (elemCommutativeMonoid : CommutativeMonoid c ℓ) where
 
 open import Algebra.Morphism
+open import Algebra.Structures
 open import Data.Nat
 open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
@@ -19,7 +20,7 @@ import Data.Vec.Functional.Algebra.Construct.Monoid as MkMonoid
 import Relation.Binary.Reasoning.Setoid as Reasoning
 
 private
-  open module Elem = CommutativeMonoid elemCommutativeMonoid hiding (isMonoid; isSemigroup)
+  open module Elem = CommutativeMonoid elemCommutativeMonoid hiding (isCommutativeMonoid; isSemigroup)
   open module Dummy {n} = Definitions (Vector Carrier n) Carrier _≈_
 
 open MkMonoid Elem.monoid public
@@ -27,14 +28,17 @@ open Reasoning setoid
 
 module _ {n : ℕ} where
 
+  isCommutativeMonoid : IsCommutativeMonoid {A = Vector Carrier n} _ _ _
+  isCommutativeMonoid = record
+    { isSemigroup = isSemigroup
+    ; identityˡ   = Pointwise.identityˡ _≈_ ε _∙_ identityˡ
+    ; comm        = Pointwise.comm _≈_ _∙_ comm
+    }
+
   commutativeMonoid : CommutativeMonoid c ℓ
   commutativeMonoid = record
     { Carrier  = Vector Carrier n
-    ; isCommutativeMonoid = record
-      { isSemigroup = isSemigroup
-      ; identityˡ   = Pointwise.identityˡ _≈_ ε _∙_ identityˡ
-      ; comm        = Pointwise.comm _≈_ _∙_ comm
-      }
+    ; isCommutativeMonoid = isCommutativeMonoid
     }
 
   scale-comm : ∀ x y → (xs : Vector Carrier n) →

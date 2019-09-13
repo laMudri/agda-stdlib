@@ -15,14 +15,21 @@ open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
 import Data.Vec.Functional.Algebra.Construct.Pointwise as Pointwise
 import Data.Vec.Functional.Algebra.Construct.Group as MkGroup
+import Data.Vec.Functional.Algebra.Construct.CommutativeMonoid as MkCommutativeMonoid
 
-open AbelianGroup elemAbelianGroup
+private
+  open module Elem = AbelianGroup elemAbelianGroup hiding (isGroup; isCommutativeMonoid)
 
-abelianGroup : ∀ {n} → AbelianGroup c ℓ
-abelianGroup {n} = record
-  { Carrier  = Vector Carrier n
-  ; isAbelianGroup = record
-    { isGroup = Group.isGroup (MkGroup.group group)
-    ; comm    = Pointwise.comm _≈_ _∙_ comm
+open MkGroup Elem.group public
+open MkCommutativeMonoid Elem.commutativeMonoid public using (scale-comm)
+
+module _ {n : ℕ} where
+
+  abelianGroup : AbelianGroup c ℓ
+  abelianGroup = record
+    { Carrier  = Vector Carrier n
+    ; isAbelianGroup = record
+      { isGroup = isGroup
+      ; comm    = Pointwise.comm _≈_ _∙_ comm
+      }
     }
-  }

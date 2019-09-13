@@ -24,7 +24,7 @@ open MkMagma Elem.magma public
 
 module _ {n : ℕ} where
 
-  isSemigroup : IsSemigroup {A = Vector Carrier n} _≈̇_ _∙̇_
+  isSemigroup : IsSemigroup {A = Vector Carrier n} _ _
   isSemigroup = record
     { isMagma = isMagma
     ; assoc   = Pointwise.assoc _≈_ _∙_ assoc

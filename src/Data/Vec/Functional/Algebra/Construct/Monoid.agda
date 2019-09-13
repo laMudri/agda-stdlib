@@ -27,7 +27,7 @@ module _ {n : ℕ} where
   ε̇ : Vector Carrier n
   ε̇ = replicate ε
 
-  isMonoid : IsMonoid {A = Vector Carrier n} _≈̇_ _∙̇_ ε̇
+  isMonoid : IsMonoid {A = Vector Carrier n} _ _ _
   isMonoid = record
     { isSemigroup = isSemigroup
     ; identity    = Pointwise.identity _≈_ ε _∙_ identity

@@ -30,7 +30,7 @@ module _ {n : ℕ} where
   _∙̇_ : Op₂ (Vector Carrier n)
   _∙̇_ = zipWith _∙_
 
-  isMagma : IsMagma _≈̇_ _∙̇_
+  isMagma : IsMagma {A = Vector Carrier n} _ _
   isMagma = record
     { isEquivalence = Pointwise.isEquivalence isEquivalence
     ; ∙-cong        = Pointwise.cong₂ _≈_ _∙_ ∙-cong
