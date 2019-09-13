@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------
 -- The Agda standard library
 --
--- Lifting rings of elements to left and right semimodules of vectors of elements
+-- Lifting rings of elements to left and right modules of vectors of elements
 ------------------------------------------------------------------------
 
 {-# OPTIONS --without-K --safe #-}
