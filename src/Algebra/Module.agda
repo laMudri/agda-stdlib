@@ -13,6 +13,8 @@ open import Algebra
 import Algebra.Structures.Module as Str
 open import Algebra.FunctionProperties.Core
 open import Algebra.FunctionProperties.Module.Core
+import Algebra.FunctionProperties.Module.Left as LFP
+import Algebra.FunctionProperties.Module.Right as RFP
 open import Function
 open import Level
 open import Relation.Binary
@@ -86,13 +88,17 @@ record _─Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr
 
   open IsLeft_─Semimodule isLeftSemimodule public
 
+  private
+    module L = LFP _≈_ _≈ᴹ_
+    module R = RFP _≈_ _≈ᴹ_
+
   leftSemimodule : Left semiring ─Semimodule m ℓm
   leftSemimodule = record { isLeftSemimodule = isLeftSemimodule }
 
   _*ᵣ_ : Opᵣ Carrier Carrierᴹ
   _*ᵣ_ = flip _*ₗ_
 
-  *ₗ-comm : ∀ (x y : Carrier) (m : Carrierᴹ) → x *ₗ y *ₗ m ≈ᴹ y *ₗ x *ₗ m
+  *ₗ-comm : L.Commutative _*ₗ_
   *ₗ-comm x y m =
     M-trans (M-sym (*ₗ-assoc x y m))
             (M-trans (*ₗ-cong (*-comm _ _) M-refl)
@@ -110,6 +116,7 @@ record _─Semimodule {r ℓr} (commutativeSemiring : CommutativeSemiring r ℓr
       ; *ᵣ-cong = flip *ₗ-cong
       ; *ᵣ-zeroʳ = *ₗ-zeroˡ
       ; *ᵣ-distribˡ = λ m x y → *ₗ-distribʳ x y m
+      ; *ᵣ-identityʳ = λ m → *ₗ-identityˡ m
       ; *ᵣ-assoc = λ m x y → M-trans (*ₗ-comm y x m) (M-sym (*ₗ-assoc x y m))
       ; *ᵣ-zeroˡ = *ₗ-zeroʳ
       ; *ᵣ-distribʳ = λ m n x → *ₗ-distribˡ x m n

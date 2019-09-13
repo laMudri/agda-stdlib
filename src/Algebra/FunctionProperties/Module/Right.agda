@@ -28,8 +28,8 @@ open import Algebra.FunctionProperties.Module.Core public
 ------------------------------------------------------------------------
 -- Properties of operations
 
-Identity : A → Opᵣ A B → Set _
-Identity a _∙ᴮ_ = ∀ m → m ≈ᴮ (m ∙ᴮ a)
+RightIdentity : A → Opᵣ A B → Set _
+RightIdentity a _∙ᴮ_ = ∀ m → (m ∙ᴮ a) ≈ᴮ m
 
 Associative : Op₂ A → Opᵣ A B → Set _
 Associative _∙ᴬ_ _∙ᴮ_ = ∀ m x y → ((m ∙ᴮ x) ∙ᴮ y) ≈ᴮ (m ∙ᴮ (x ∙ᴬ y))
@@ -47,6 +47,9 @@ LeftZero z _∙_ = ∀ x → (z ∙ x) ≈ᴮ z
 
 RightZero : A → B → Opᵣ A B → Set _
 RightZero zᴬ zᴮ _∙_ = ∀ x → (x ∙ zᴬ) ≈ᴮ zᴮ
+
+Commutative : Opᵣ A B → Set _
+Commutative _∙_ = ∀ m x y → ((m ∙ x) ∙ y) ≈ᴮ ((m ∙ y) ∙ x)
 
 Congruent : Opᵣ A B → Set _
 Congruent _∙_ = ∀ {m m′ x x′} → m ≈ᴮ m′ → x ≈ᴬ x′ → (m ∙ x) ≈ᴮ (m′ ∙ x′)

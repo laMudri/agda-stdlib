@@ -34,7 +34,7 @@ module _ {r ℓr} (semiring : Semiring r ℓr) where
       *ₗ-cong : Congruent *ₗ
       *ₗ-zeroˡ : LeftZero 0# 0ᴹ *ₗ
       *ₗ-distribʳ : *ₗ DistributesOverʳ _+_ ⟶ +ᴹ
-      *ₗ-identity : Identity 1# *ₗ
+      *ₗ-identityˡ : LeftIdentity 1# *ₗ
       *ₗ-assoc : Associative _*_ *ₗ
       *ₗ-zeroʳ : RightZero 0ᴹ *ₗ
       *ₗ-distribˡ : *ₗ DistributesOverˡ +ᴹ
@@ -59,7 +59,7 @@ module _ {r ℓr} (semiring : Semiring r ℓr) where
       *ᵣ-cong : Congruent *ᵣ
       *ᵣ-zeroʳ : RightZero 0# 0ᴹ *ᵣ
       *ᵣ-distribˡ : *ᵣ DistributesOverˡ _+_ ⟶ +ᴹ
-      *ᵣ-identity : Identity 1# *ᵣ
+      *ᵣ-identityʳ : RightIdentity 1# *ᵣ
       *ᵣ-assoc : Associative _*_ *ᵣ
       *ᵣ-zeroˡ : LeftZero 0ᴹ *ᵣ
       *ᵣ-distribʳ : *ᵣ DistributesOverʳ +ᴹ
