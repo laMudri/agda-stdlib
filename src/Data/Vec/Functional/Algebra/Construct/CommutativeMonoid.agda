@@ -37,6 +37,16 @@ module _ {n : ℕ} where
       }
     }
 
+  scale-comm : ∀ x y → (xs : Vector Carrier n) →
+               scale x (scale y xs) ≈̇ scale y (scale x xs)
+  scale-comm x y xs i = begin
+    scale x (scale y xs) i ≡⟨⟩
+    x ∙ (y ∙ xs i)         ≈⟨ sym (assoc _ _ _) ⟩
+    (x ∙ y) ∙ xs i         ≈⟨ ∙-cong (comm _ _) refl ⟩
+    (y ∙ x) ∙ xs i         ≈⟨ assoc _ _ _ ⟩
+    y ∙ (x ∙ xs i)         ≡⟨⟩
+    scale y (scale x xs) i ∎
+
 ∑ = foldr _∙_ ε
 
 ∑-homo-0 : ∀ {n} → Homomorphic₀ {n} ∑ (replicate ε) ε
@@ -49,12 +59,12 @@ module _ {n : ℕ} where
   (head xs ∙ head ys) ∙ ∑ (zipWith _∙_ (tail xs) (tail ys))
     ≈⟨ ∙-cong refl (∑-homo-+ {n} (tail xs) (tail ys)) ⟩
   (head xs ∙ head ys) ∙ (∑ (tail xs) ∙ ∑ (tail ys))
-    ≈⟨ exchange _ _ _ _ ⟩
+    ≈⟨ exch _ _ _ _ ⟩
   (head xs ∙ ∑ (tail xs)) ∙ (head ys ∙ ∑ (tail ys))
     ∎
   where
-  exchange : ∀ w x y z → (w ∙ x) ∙ (y ∙ z) ≈ (w ∙ y) ∙ (x ∙ z)
-  exchange w x y z = begin
+  exch : ∀ w x y z → (w ∙ x) ∙ (y ∙ z) ≈ (w ∙ y) ∙ (x ∙ z)
+  exch w x y z = begin
     (w ∙ x) ∙ (y ∙ z)  ≈⟨ assoc _ _ _ ⟩
     w ∙ (x ∙ (y ∙ z))  ≈⟨ ∙-cong refl (sym (assoc _ _ _)) ⟩
     w ∙ ((x ∙ y) ∙ z)  ≈⟨ ∙-cong refl (∙-cong (comm _ _) refl) ⟩
