@@ -28,6 +28,9 @@ open import Algebra.FunctionProperties.Module.Core public
 ------------------------------------------------------------------------
 -- Properties of operations
 
+Identity : A → Opₗ A B → Set _
+Identity a _∙ᴮ_ = ∀ m → (a ∙ᴮ m) ≈ᴮ m
+
 Associative : Op₂ A → Opₗ A B → Set _
 Associative _∙ᴬ_ _∙ᴮ_ = ∀ x y m → ((x ∙ᴬ y) ∙ᴮ m) ≈ᴮ (x ∙ᴮ (y ∙ᴮ m))
 

@@ -33,6 +33,22 @@ record Left_─Semimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
 
   open IsLeft_─Semimodule isLeftSemimodule public
 
+record Left_─Module {r ℓr} (ring : Ring r ℓr) m ℓm
+                    : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
+  open Ring ring
+
+  field
+    Carrierᴹ : Set m
+    _≈ᴹ_ : Rel Carrierᴹ ℓm
+  open Str _≈ᴹ_
+  field
+    _+ᴹ_ : Op₂ Carrierᴹ
+    _*ₗ_ : Opₗ Carrier Carrierᴹ
+    0ᴹ : Carrierᴹ
+    isLeftSemimodule : IsLeft semiring ─Semimodule _+ᴹ_ _*ₗ_ 0ᴹ
+
+  open IsLeft_─Semimodule isLeftSemimodule public
+
 record Right_─Semimodule {r ℓr} (semiring : Semiring r ℓr) m ℓm
                          : Set (r ⊔ ℓr ⊔ suc (m ⊔ ℓm)) where
   open Semiring semiring

@@ -34,6 +34,7 @@ module _ {r ℓr} (semiring : Semiring r ℓr) where
       *ₗ-cong : Congruent *ₗ
       *ₗ-zeroˡ : LeftZero 0# 0ᴹ *ₗ
       *ₗ-distribʳ : *ₗ DistributesOverʳ _+_ ⟶ +ᴹ
+      *ₗ-identity : Identity 1# *ₗ
       *ₗ-assoc : Associative _*_ *ₗ
       *ₗ-zeroʳ : RightZero 0ᴹ *ₗ
       *ₗ-distribˡ : *ₗ DistributesOverˡ +ᴹ
@@ -58,6 +59,7 @@ module _ {r ℓr} (semiring : Semiring r ℓr) where
       *ᵣ-cong : Congruent *ᵣ
       *ᵣ-zeroʳ : RightZero 0# 0ᴹ *ᵣ
       *ᵣ-distribˡ : *ᵣ DistributesOverˡ _+_ ⟶ +ᴹ
+      *ᵣ-identity : Identity 1# *ᵣ
       *ᵣ-assoc : Associative _*_ *ᵣ
       *ᵣ-zeroˡ : LeftZero 0ᴹ *ᵣ
       *ᵣ-distribʳ : *ᵣ DistributesOverʳ +ᴹ
@@ -73,3 +75,28 @@ module _ {r ℓr} (semiring : Semiring r ℓr) where
                ; reflexive to M-reflexive; setoid to M-setoid; sym to M-sym
                ; trans to M-trans; ∙-cong to +ᴹ-cong; ∙-congʳ to +ᴹ-congʳ
                ; ∙-congˡ to +ᴹ-congˡ)
+
+module _ {r ℓr} (ring : Ring r ℓr) where
+  open Ring ring renaming (Carrier to R)
+
+  record IsLeft_─Module (+ᴹ : Op₂ M) (*ₗ : Opₗ R M) (0ᴹ : M) (-ᴹ : Op₁ M)
+                        : Set (r ⊔ m ⊔ ℓr ⊔ ℓm) where
+    open FP _≈ᴹ_
+    field
+      isLeftSemimodule : IsLeft semiring ─Semimodule +ᴹ *ₗ 0ᴹ
+      -ᴹ‿cong : Congruent₁ -ᴹ
+      +ᴹ-inverse : Inverse 0ᴹ -ᴹ +ᴹ
+
+    open IsLeft_─Semimodule isLeftSemimodule public
+
+    +ᴹ-isGroup : IsGroup _≈ᴹ_ +ᴹ 0ᴹ -ᴹ
+    +ᴹ-isGroup = record
+      { isMonoid = +ᴹ-isMonoid
+      ; inverse = +ᴹ-inverse
+      ; ⁻¹-cong = -ᴹ‿cong
+      }
+
+    open IsGroup +ᴹ-isGroup public
+      using ()
+      renaming (inverseˡ to +ᴹ-inverseˡ; inverseʳ to +ᴹ-inverseʳ
+               ; uniqueˡ-⁻¹ to uniqueˡ‿-ᴹ ; uniqueʳ-⁻¹ to uniqueʳ‿-ᴹ)
