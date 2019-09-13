@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------
 -- The Agda standard library
 --
--- Use a semiring of elements to define a number of properties on vectors of elements
+-- Lifting semirings of elements to left and right semimodules of vectors of elements
 ------------------------------------------------------------------------
 
 {-# OPTIONS --without-K --safe #-}
