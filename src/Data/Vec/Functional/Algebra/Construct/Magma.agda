@@ -44,5 +44,5 @@ module _ {n : ℕ} where
     ; isMagma = isMagma
     }
 
-  scale : Carrier → Vector Carrier n → Vector Carrier n
-  scale x xs = map (x ∙_) xs
+  scaleₗ : Carrier → Vector Carrier n → Vector Carrier n
+  scaleₗ x xs = map (x ∙_) xs

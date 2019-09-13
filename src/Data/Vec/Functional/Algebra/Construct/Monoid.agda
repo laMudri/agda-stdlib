@@ -40,10 +40,10 @@ module _ {n : ℕ} where
     ; isMonoid = isMonoid
     }
 
-  scale-identityˡ : ∀ (xs : Vector Carrier n) →
-                    scale ε xs ≈̇ xs
-  scale-identityˡ xs i = identityˡ (xs i)
+  scaleₗ-identityˡ : ∀ (xs : Vector Carrier n) →
+                     scaleₗ ε xs ≈̇ xs
+  scaleₗ-identityˡ xs i = identityˡ (xs i)
 
-  scale-identityʳ : ∀ (x : Carrier) →
-                    scale x ε̇ ≈̇ replicate x
-  scale-identityʳ x i = identityʳ x
+  scaleₗ-identityʳ : ∀ (x : Carrier) →
+                     scaleₗ x ε̇ ≈̇ replicate x
+  scaleₗ-identityʳ x i = identityʳ x

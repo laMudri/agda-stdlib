@@ -24,6 +24,12 @@ private
   open module Dummy {n} = Definitions (Vector Carrier n) Carrier _≈_
 
 open MkMonoid Elem.monoid public
+  renaming
+    ( scaleₗ           to scale
+    ; scaleₗ-assoc     to scale-assoc
+    ; scaleₗ-identityˡ to scale-identityˡ
+    ; scaleₗ-identityʳ to scale-identityʳ
+    )
 open Reasoning setoid
 
 module _ {n : ℕ} where

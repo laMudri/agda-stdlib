@@ -36,6 +36,6 @@ module _ {n : ℕ} where
     ; isSemigroup = isSemigroup
     }
 
-  scale-assoc : ∀ x y (xs : Vector Carrier n) →
-                scale (x ∙ y) xs ≈̇ scale x (scale y xs)
-  scale-assoc x y xs i = Elem.assoc x y (xs i)
+  scaleₗ-assoc : ∀ x y (xs : Vector Carrier n) →
+                scaleₗ (x ∙ y) xs ≈̇ scaleₗ x (scaleₗ y xs)
+  scaleₗ-assoc x y xs i = Elem.assoc x y (xs i)
