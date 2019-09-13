@@ -74,7 +74,7 @@ module _ {n : ℕ} where
   scaleₗ-zeroˡ xs i = zeroˡ (xs i)
 
   scaleₗ-distribʳ : scaleₗ L.DistributesOverʳ _+_ ⟶ _+̇_
-  scaleₗ-distribʳ x y xs i = distribʳ (xs i) x y
+  scaleₗ-distribʳ xs x y i = distribʳ (xs i) x y
 
   scaleₗ-zeroʳ : L.RightZero 0̇ scaleₗ
   scaleₗ-zeroʳ x i = zeroʳ x
