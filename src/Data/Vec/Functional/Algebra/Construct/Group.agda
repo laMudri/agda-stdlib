@@ -25,11 +25,6 @@ open MkMonoid Elem.monoid public
 
 module _ {n : ℕ} where
 
-  open FP {A = Vector Carrier n} _≈̇_
-
-  _⁻̇¹ : Vector Carrier n → Vector Carrier n
-  _⁻̇¹ = map _⁻¹
-
   isGroup : IsGroup {A = Vector Carrier n} _ _ _ _
   isGroup = record
     { isMonoid = isMonoid
@@ -38,10 +33,5 @@ module _ {n : ℕ} where
     }
 
   group : Group c ℓ
-  group = record
-    { Carrier = Vector Carrier n
-    ; isGroup = isGroup
-    }
+  group = record { isGroup = isGroup }
 
-  ⁻̇¹-cong : Congruent₁ _⁻̇¹
-  ⁻̇¹-cong ps i = ⁻¹-cong (ps i)
