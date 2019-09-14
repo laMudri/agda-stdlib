@@ -25,58 +25,59 @@ import Data.Vec.Functional.Algebra.Construct.CommutativeMonoid as MkCommutativeM
 open import Relation.Binary
 
 open Semiring semiring
-open RightSemimodule elemRightSemimodule hiding (isRightSemimodule)
-open MkCommutativeMonoid +ᴹ-commutativeMonoid using (isCommutativeMonoid)
+
+private
+  open module Elem = RightSemimodule elemRightSemimodule
+  open module Prev = MkCommutativeMonoid +ᴹ-commutativeMonoid
 
 module _ {n : ℕ} where
 
-  _≈̇_ : Rel (Vector Carrierᴹ n) ℓ
-  _≈̇_ = Pointwise _≈ᴹ_
-
+  open CommutativeMonoid (Prev.commutativeMonoid {n = n})
+    using ()
+    renaming
+      ( _≈_                 to _≈̇_
+      ; _∙_                 to _+̇_
+      ; ε                   to 0̇
+      ; isCommutativeMonoid to +̇-isCommutativeMonoid
+      )
   open R _≈_ _≈̇_
   open MS _≈̇_
 
-  _+̇_ : Op₂ (Vector Carrierᴹ n)
-  _+̇_ = zipWith _+ᴹ_
+  private
+    _*̇ᵣ_ : R.Opᵣ Carrier (Vector Carrierᴹ n)
+    xs *̇ᵣ x = map (_*ᵣ x) xs
 
-  0̇ : Vector Carrierᴹ n
-  0̇ = replicate 0ᴹ
+    *̇ᵣ-cong : Congruent _*̇ᵣ_
+    *̇ᵣ-cong ps p i = *ᵣ-cong (ps i) p
 
-  _*̇ᵣ_ : R.Opᵣ Carrier (Vector Carrierᴹ n)
-  xs *̇ᵣ x = map (_*ᵣ x) xs
+    *̇ᵣ-assoc : Associative _*_ _*̇ᵣ_
+    *̇ᵣ-assoc xs x y i = *ᵣ-assoc (xs i) x y
 
-  *̇ᵣ-cong : Congruent _*̇ᵣ_
-  *̇ᵣ-cong ps p i = *ᵣ-cong (ps i) p
+    *̇ᵣ-identityʳ : RightIdentity 1# _*̇ᵣ_
+    *̇ᵣ-identityʳ xs i = *ᵣ-identityʳ (xs i)
 
-  *̇ᵣ-assoc : Associative _*_ _*̇ᵣ_
-  *̇ᵣ-assoc xs x y i = *ᵣ-assoc (xs i) x y
+    *̇ᵣ-zeroʳ : RightZero 0# 0̇ _*̇ᵣ_
+    *̇ᵣ-zeroʳ xs i = *ᵣ-zeroʳ (xs i)
 
-  *̇ᵣ-identityʳ : RightIdentity 1# _*̇ᵣ_
-  *̇ᵣ-identityʳ xs i = *ᵣ-identityʳ (xs i)
+    *̇ᵣ-distribˡ : _*̇ᵣ_ DistributesOverˡ _+_ ⟶ _+̇_
+    *̇ᵣ-distribˡ xs x y i = *ᵣ-distribˡ (xs i) x y
 
-  *̇ᵣ-zeroʳ : RightZero 0# 0̇ _*̇ᵣ_
-  *̇ᵣ-zeroʳ xs i = *ᵣ-zeroʳ (xs i)
+    *̇ᵣ-zeroˡ : LeftZero 0̇ _*̇ᵣ_
+    *̇ᵣ-zeroˡ x i = *ᵣ-zeroˡ x
 
-  *̇ᵣ-distribˡ : _*̇ᵣ_ DistributesOverˡ _+_ ⟶ _+̇_
-  *̇ᵣ-distribˡ xs x y i = *ᵣ-distribˡ (xs i) x y
-
-  *̇ᵣ-zeroˡ : LeftZero 0̇ _*̇ᵣ_
-  *̇ᵣ-zeroˡ x i = *ᵣ-zeroˡ x
-
-  *̇ᵣ-distribʳ : _*̇ᵣ_ DistributesOverʳ _+̇_
-  *̇ᵣ-distribʳ x xs ys i = *ᵣ-distribʳ x (xs i) (ys i)
-
-  isRightSemimodule : IsRightSemimodule semiring _ _ _
-  isRightSemimodule = record
-    { +ᴹ-isCommutativeMonoid = isCommutativeMonoid
-    ; *ᵣ-cong                = *̇ᵣ-cong
-    ; *ᵣ-zeroˡ               = *̇ᵣ-zeroˡ
-    ; *ᵣ-distribʳ            = *̇ᵣ-distribʳ
-    ; *ᵣ-identityʳ           = *̇ᵣ-identityʳ
-    ; *ᵣ-assoc               = *̇ᵣ-assoc
-    ; *ᵣ-zeroʳ               = *̇ᵣ-zeroʳ
-    ; *ᵣ-distribˡ            = *̇ᵣ-distribˡ
-    }
+    *̇ᵣ-distribʳ : _*̇ᵣ_ DistributesOverʳ _+̇_
+    *̇ᵣ-distribʳ x xs ys i = *ᵣ-distribʳ x (xs i) (ys i)
 
   rightSemimodule : RightSemimodule semiring c ℓ
-  rightSemimodule = record { isRightSemimodule = isRightSemimodule }
+  rightSemimodule = record
+    { isRightSemimodule = record
+      { +ᴹ-isCommutativeMonoid = +̇-isCommutativeMonoid
+      ; *ᵣ-cong                = *̇ᵣ-cong
+      ; *ᵣ-zeroˡ               = *̇ᵣ-zeroˡ
+      ; *ᵣ-distribʳ            = *̇ᵣ-distribʳ
+      ; *ᵣ-identityʳ           = *̇ᵣ-identityʳ
+      ; *ᵣ-assoc               = *̇ᵣ-assoc
+      ; *ᵣ-zeroʳ               = *̇ᵣ-zeroʳ
+      ; *ᵣ-distribˡ            = *̇ᵣ-distribˡ
+      }
+    }

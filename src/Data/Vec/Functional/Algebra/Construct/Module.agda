@@ -14,20 +14,20 @@ module Data.Vec.Functional.Algebra.Construct.Module
   (elemModule : Module commutativeRing c ℓ)
   where
 
-import Algebra.Structures.Module as MS
 open import Data.Nat using (ℕ)
+open import Data.Vec.Functional using (Vector)
 import Data.Vec.Functional.Algebra.Construct.LeftModule as MkLeftModule
 
-open CommutativeRing commutativeRing using (ring; _≈_)
-open Module elemModule using (leftModule)
-open MkLeftModule ring leftModule using (_≈̇_; isLeftModule)
+open CommutativeRing commutativeRing
 
-module _ {n : ℕ} where
+private
+  open module Elem = Module elemModule
+  open module Prev = MkLeftModule ring Elem.leftModule
 
-  open MS (_≈̇_ {n = n})
-
-  isModule : IsModule commutativeRing _ _ _ _
-  isModule = record { isLeftModule = isLeftModule }
-
-  module′ : Module commutativeRing c ℓ
-  module′ = record { isModule = isModule }
+module′ : ∀ {n} → Module commutativeRing c ℓ
+module′ {n} = record
+  { Carrierᴹ = Vector Carrierᴹ n
+  ; isModule = record
+    { isLeftModule = LeftModule.isLeftModule Prev.leftModule
+    }
+  }

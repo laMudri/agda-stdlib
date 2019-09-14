@@ -15,19 +15,19 @@ module Data.Vec.Functional.Algebra.Construct.Semimodule
   where
 
 import Algebra.Structures.Module as MS
-open import Data.Nat using (ℕ)
+open import Data.Vec.Functional using (Vector)
 import Data.Vec.Functional.Algebra.Construct.LeftSemimodule as MkLeftSemimodule
 
 open CommutativeSemiring commutativeSemiring
-open Semimodule elemSemimodule hiding (isSemimodule; isLeftSemimodule)
-open MkLeftSemimodule semiring leftSemimodule
 
-module _ {n : ℕ} where
+private
+  open module Elem = Semimodule elemSemimodule
+  open module Prev = MkLeftSemimodule semiring leftSemimodule
 
-  open MS (_≈̇_ {n = n})
-
-  isSemimodule : IsSemimodule commutativeSemiring _ _ _
-  isSemimodule = record { isLeftSemimodule = isLeftSemimodule }
-
-  semimodule : Semimodule commutativeSemiring c ℓ
-  semimodule = record { isSemimodule = isSemimodule }
+semimodule : ∀ {n} → Semimodule commutativeSemiring c ℓ
+semimodule {n} = record
+  { Carrierᴹ     = Vector Carrierᴹ n
+  ; isSemimodule = record
+    { isLeftSemimodule = LeftSemimodule.isLeftSemimodule Prev.leftSemimodule
+    }
+  }

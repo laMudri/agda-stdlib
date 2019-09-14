@@ -1,4 +1,4 @@
-------------------------------------------------------------------------
+-------------------------------------------------------------------
 -- The Agda standard library
 --
 -- Lifting left modules of elements to left modules of vectors of elements
@@ -20,18 +20,20 @@ open import Data.Nat using (ℕ)
 import Data.Vec.Functional.Algebra.Construct.LeftSemimodule as MkLeftSemimodule
 import Data.Vec.Functional.Algebra.Construct.AbelianGroup as MkAbelianGroup
 
-open Ring ring using (semiring; _≈_)
-open LeftModule elemLeftModule using (leftSemimodule; +ᴹ-abelianGroup)
-open MkLeftSemimodule semiring leftSemimodule public
-open MkAbelianGroup +ᴹ-abelianGroup using () renaming (abelianGroup to +̇-abelianGroup)
+open Ring ring
+
+private
+  open module Elem = LeftModule elemLeftModule
+  open module Prev = MkLeftSemimodule semiring Elem.leftSemimodule
 
 module _ {n : ℕ} where
 
-  open L _≈_ (_≈̇_ {n = n})
-  open MS (_≈̇_ {n = n})
-
+  open MkAbelianGroup Elem.+ᴹ-abelianGroup
+    using ()
+    renaming
+      ( abelianGroup to +̇-abelianGroup
+      )
   open AbelianGroup (+̇-abelianGroup {n = n})
-    public
     using ()
     renaming
       ( _⁻¹     to -̇_
@@ -39,12 +41,11 @@ module _ {n : ℕ} where
       ; inverse to -̇‿inverse
       )
 
-  isLeftModule : IsLeftModule ring _ _ _ _
-  isLeftModule = record
-    { isLeftSemimodule = isLeftSemimodule
-    ; -ᴹ‿cong          = -̇‿cong
-    ; -ᴹ‿inverse       = -̇‿inverse
-    }
-
   leftModule : LeftModule ring c ℓ
-  leftModule = record { isLeftModule = isLeftModule }
+  leftModule = record
+    { isLeftModule = record
+      { isLeftSemimodule = LeftSemimodule.isLeftSemimodule Prev.leftSemimodule
+      ; -ᴹ‿cong          = -̇‿cong
+      ; -ᴹ‿inverse       = -̇‿inverse
+      }
+    }

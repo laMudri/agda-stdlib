@@ -11,28 +11,22 @@ open import Algebra
 module Data.Vec.Functional.Algebra.Construct.AbelianGroup {c ℓ} (elemAbelianGroup : AbelianGroup c ℓ) where
 
 open import Algebra.Structures
-open import Data.Nat
-open import Data.Vec.Functional
-open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
+open import Data.Nat using (ℕ)
+open import Data.Vec.Functional using (Vector)
 import Data.Vec.Functional.Algebra.Construct.Pointwise as Pointwise
 import Data.Vec.Functional.Algebra.Construct.Group as MkGroup
-import Data.Vec.Functional.Algebra.Construct.CommutativeMonoid as MkCommutativeMonoid
 
 private
-  open module Elem = AbelianGroup elemAbelianGroup hiding (isAbelianGroup; isGroup)
+  open module Elem = AbelianGroup elemAbelianGroup
+  open module Prev = MkGroup Elem.group
 
 open MkGroup Elem.group public
 
-module _ {n : ℕ} where
-
-  isAbelianGroup : IsAbelianGroup {A = Vector Carrier n} _ _ _ _
-  isAbelianGroup = record
-    { isGroup = isGroup
+abelianGroup : ∀ {n} → AbelianGroup c ℓ
+abelianGroup {n} = record
+  { Carrier        = Vector Carrier n
+  ; isAbelianGroup = record
+    { isGroup = Group.isGroup Prev.group
     ; comm    = Pointwise.comm _≈_ _∙_ comm
     }
-
-  abelianGroup : AbelianGroup c ℓ
-  abelianGroup = record
-    { Carrier        = Vector Carrier n
-    ; isAbelianGroup = isAbelianGroup
-    }
+  }

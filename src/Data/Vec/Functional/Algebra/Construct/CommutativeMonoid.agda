@@ -12,58 +12,30 @@ module Data.Vec.Functional.Algebra.Construct.CommutativeMonoid {c ℓ} (elemComm
 
 open import Algebra.Morphism
 open import Algebra.Structures
-open import Data.Nat
+open import Data.Nat using (ℕ; suc; zero)
 open import Data.Vec.Functional
-open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
 import Data.Vec.Functional.Algebra.Construct.Pointwise as Pointwise
 import Data.Vec.Functional.Algebra.Construct.Monoid as MkMonoid
 import Relation.Binary.Reasoning.Setoid as Reasoning
 
 private
-  open module Elem = CommutativeMonoid elemCommutativeMonoid hiding (isCommutativeMonoid; isSemigroup)
-  open module Dummy {n} = Definitions (Vector Carrier n) Carrier _≈_
+  open module Elem = CommutativeMonoid elemCommutativeMonoid
+  open module Prev = MkMonoid Elem.monoid
 
-open MkMonoid Elem.monoid public
-open Reasoning setoid
-
-module _ {n : ℕ} where
-
-  isCommutativeMonoid : IsCommutativeMonoid {A = Vector Carrier n} _ _ _
-  isCommutativeMonoid = record
-    { isSemigroup = isSemigroup
+commutativeMonoid : ∀ {n} → CommutativeMonoid c ℓ
+commutativeMonoid {n} = record
+  { Carrier             = Vector Carrier n
+  ; isCommutativeMonoid = record
+    { isSemigroup = Monoid.isSemigroup Prev.monoid
     ; identityˡ   = Pointwise.identityˡ _≈_ ε _∙_ identityˡ
     ; comm        = Pointwise.comm _≈_ _∙_ comm
     }
+  }
 
-  commutativeMonoid : CommutativeMonoid c ℓ
-  commutativeMonoid = record
-    { Carrier  = Vector Carrier n
-    ; isCommutativeMonoid = isCommutativeMonoid
-    }
+private
+  open module Dummy {n} = Definitions (Vector Carrier n) Carrier _≈_
 
-{-
-  scaleₗ-comm : L.Commutative scaleₗ
-  scaleₗ-comm x y xs i = begin
-    scaleₗ x (scaleₗ y xs) i ≡⟨⟩
-    x ∙ (y ∙ xs i)         ≈⟨ sym (assoc _ _ _) ⟩
-    (x ∙ y) ∙ xs i         ≈⟨ ∙-cong (comm _ _) refl ⟩
-    (y ∙ x) ∙ xs i         ≈⟨ assoc _ _ _ ⟩
-    y ∙ (x ∙ xs i)         ≡⟨⟩
-    scaleₗ y (scaleₗ x xs) i ∎
-
-  scaleᵣ-comm : R.Commutative scaleᵣ
-  scaleᵣ-comm xs x y i = begin
-    scaleᵣ (scaleᵣ xs x) y i ≡⟨⟩
-    (xs i ∙ x) ∙ y          ≈⟨ assoc _ _ _ ⟩
-    xs i ∙ (x ∙ y)          ≈⟨ ∙-cong refl (comm _ _) ⟩
-    xs i ∙ (y ∙ x)          ≈⟨ sym (assoc _ _ _) ⟩
-    (xs i ∙ y) ∙ x          ≡⟨⟩
-    scaleᵣ (scaleᵣ xs y) x i ∎
-
-  scaleₗ≡scaleᵣ : (x : Carrier) (xs : Vector Carrier n) →
-                  scaleₗ x xs ≈̇ scaleᵣ xs x
-  scaleₗ≡scaleᵣ x xs i = comm x (xs i)
--}
+open Reasoning setoid
 
 ∑ = foldr _∙_ ε
 
