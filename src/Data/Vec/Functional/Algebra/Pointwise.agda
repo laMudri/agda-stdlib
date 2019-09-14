@@ -1,3 +1,8 @@
+------------------------------------------------------------------------
+-- The Agda standard library
+--
+-- Lifting algebraic structures pointwise into structures on vectors.
+------------------------------------------------------------------------
 module Data.Vec.Functional.Algebra.Pointwise where
 
 open import Level

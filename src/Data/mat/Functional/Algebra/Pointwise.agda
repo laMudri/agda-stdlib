@@ -1,3 +1,8 @@
+------------------------------------------------------------------------
+-- The Agda standard library
+--
+-- Lifting algebraic structures pointwise into structures on matrices.
+------------------------------------------------------------------------
 module Data.Mat.Functional.Algebra.Pointwise where
 
 open import Level
