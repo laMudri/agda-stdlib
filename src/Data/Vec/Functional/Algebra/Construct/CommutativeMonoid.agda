@@ -12,8 +12,6 @@ module Data.Vec.Functional.Algebra.Construct.CommutativeMonoid {c ℓ} (elemComm
 
 open import Algebra.Morphism
 open import Algebra.Structures
-import Algebra.FunctionProperties.Module.Left as LModProp
-import Algebra.FunctionProperties.Module.Right as RModProp
 open import Data.Nat
 open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
@@ -30,10 +28,6 @@ open Reasoning setoid
 
 module _ {n : ℕ} where
 
-  private
-    module L = LModProp _≈_ (_≈̇_ {n = n})
-    module R = RModProp _≈_ (_≈̇_ {n = n})
-
   isCommutativeMonoid : IsCommutativeMonoid {A = Vector Carrier n} _ _ _
   isCommutativeMonoid = record
     { isSemigroup = isSemigroup
@@ -47,6 +41,7 @@ module _ {n : ℕ} where
     ; isCommutativeMonoid = isCommutativeMonoid
     }
 
+{-
   scaleₗ-comm : L.Commutative scaleₗ
   scaleₗ-comm x y xs i = begin
     scaleₗ x (scaleₗ y xs) i ≡⟨⟩
@@ -68,6 +63,7 @@ module _ {n : ℕ} where
   scaleₗ≡scaleᵣ : (x : Carrier) (xs : Vector Carrier n) →
                   scaleₗ x xs ≈̇ scaleᵣ xs x
   scaleₗ≡scaleᵣ x xs i = comm x (xs i)
+-}
 
 ∑ = foldr _∙_ ε
 

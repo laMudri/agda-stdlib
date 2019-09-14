@@ -49,15 +49,3 @@ module _ {n : ℕ} where
     ; _∙_     = _∙̇_
     ; isMagma = isMagma
     }
-
-  scaleₗ : L.Opₗ Carrier (Vector Carrier n)
-  scaleₗ x xs = map (x ∙_) xs
-
-  scaleₗ-cong : L.Congruent scaleₗ
-  scaleₗ-cong p ps i = ∙-cong p (ps i)
-
-  scaleᵣ : R.Opᵣ Carrier (Vector Carrier n)
-  scaleᵣ xs x = map (_∙ x) xs
-
-  scaleᵣ-cong : R.Congruent scaleᵣ
-  scaleᵣ-cong ps p i = ∙-cong (ps i) p

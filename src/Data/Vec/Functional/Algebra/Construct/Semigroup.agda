@@ -11,8 +11,6 @@ open import Algebra
 module Data.Vec.Functional.Algebra.Construct.Semigroup {c ℓ} (elemSemigroup : Semigroup c ℓ) where
 
 open import Algebra.Structures
-import Algebra.FunctionProperties.Module.Left as LModProp
-import Algebra.FunctionProperties.Module.Right as RModProp
 open import Data.Nat
 open import Data.Vec.Functional
 open import Data.Vec.Functional.Relation.Binary.Pointwise using (Pointwise)
@@ -26,10 +24,6 @@ open MkMagma Elem.magma public
 
 module _ {n : ℕ} where
 
-  private
-    module L = LModProp _≈_ (_≈̇_ {n = n})
-    module R = RModProp _≈_ (_≈̇_ {n = n})
-
   isSemigroup : IsSemigroup {A = Vector Carrier n} _ _
   isSemigroup = record
     { isMagma = isMagma
@@ -42,8 +36,3 @@ module _ {n : ℕ} where
     ; isSemigroup = isSemigroup
     }
 
-  scaleₗ-assoc : L.Associative _∙_ scaleₗ
-  scaleₗ-assoc x y xs i = assoc x y (xs i)
-
-  scaleᵣ-assoc : R.Associative _∙_ scaleᵣ
-  scaleᵣ-assoc xs x y i = assoc (xs i) x y

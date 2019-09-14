@@ -22,7 +22,6 @@ private
   open module Elem = AbelianGroup elemAbelianGroup hiding (isAbelianGroup; isGroup)
 
 open MkGroup Elem.group public
-open MkCommutativeMonoid Elem.commutativeMonoid public using (scaleₗ-comm; scaleᵣ-comm)
 
 module _ {n : ℕ} where
 
