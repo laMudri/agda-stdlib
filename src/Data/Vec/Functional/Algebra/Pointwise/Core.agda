@@ -9,7 +9,7 @@
 
 open import Relation.Binary
 
-module Data.Vec.Functional.Algebra.Construct.Pointwise
+module Data.Vec.Functional.Algebra.Pointwise.Core
   {a ℓ} {A : Set a} (_≈_ : Rel A ℓ)
   where
 
