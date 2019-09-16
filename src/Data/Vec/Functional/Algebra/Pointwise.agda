@@ -20,6 +20,9 @@ import Data.Vec.Functional.Algebra.Pointwise.Core as Pointwise
 private
   variable c ℓ m mℓ : Level
 
+------------------------------------------------------------------------
+-- Addition of vectors
+
 pointwise-magma : Magma c ℓ → ℕ → Magma c ℓ
 pointwise-magma magma n = record
   { Carrier = Vector Carrier n
@@ -70,6 +73,9 @@ pointwise-abelianGroup abelianGroup n = record
     ; comm    = Pointwise.comm _≈_ _∙_ comm
     }
   } where open AbelianGroup abelianGroup
+
+------------------------------------------------------------------------
+-- Scaling of a vector by a scalar
 
 pointwise-leftSemimodule : (semiring : Semiring c ℓ) →
                            LeftSemimodule semiring m mℓ → ℕ → LeftSemimodule semiring m mℓ
