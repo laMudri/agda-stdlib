@@ -20,8 +20,15 @@ open import Relation.Binary using (Setoid; module Setoid; Decidable)
 open import Relation.Binary.PropositionalEquality
 open import Relation.Nullary
 
+-- Get the boolean value out of the decision without
+-- forgetting `P`.
+-- `⌊_⌋` should be used in conjunction with `toWitness` and
+-- similar functions for proof automation, whereas `proj₁`
+-- should be used whenever branching via `if_then_else_`.
+
 ⌊_⌋ : ∀ {p} {P : Set p} → Dec P → Bool
-⌊_⌋ = proj₁
+⌊ true  , _ ⌋ = true
+⌊ false , _ ⌋ = false
 
 True : ∀ {p} {P : Set p} → Dec P → Set
 True Q = T ⌊ Q ⌋
