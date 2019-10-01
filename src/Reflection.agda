@@ -21,7 +21,7 @@ open import Level
 open import Relation.Binary
 open import Relation.Binary.PropositionalEquality
 open import Relation.Binary.PropositionalEquality.TrustMe
-open import Relation.Nullary hiding (module Dec)
+open import Relation.Nullary
 open import Relation.Nullary.Decidable as Dec
 open import Relation.Nullary.Product
 

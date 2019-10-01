@@ -214,9 +214,9 @@ zero  ∣? zero                     = yes (0 ∣0)
 zero  ∣? suc n                    = no ((λ()) ∘′ 0∣⇒≡0)
 suc m ∣? n                        with n divMod suc m
 suc m ∣? .(q * suc m)             | result q zero    refl =
-  yes $ divides q refl
+  yes $′ divides q refl
 suc m ∣? .(1 + toℕ r + q * suc m) | result q (suc r) refl =
-  no $ nonZeroDivisor-lemma m q (suc r) (λ())
+  no $′ nonZeroDivisor-lemma m q (suc r) (λ())
 
 ------------------------------------------------------------------------
 -- DEPRECATED - please use new names as continuing support for the old

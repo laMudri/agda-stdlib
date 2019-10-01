@@ -28,7 +28,7 @@ open import Function.Inverse as Inv using (_↔_; module Inverse)
 open import Function.Related as Related
 open import Relation.Binary
 open import Relation.Binary.PropositionalEquality as P using (_≡_; _≗_)
-open import Relation.Nullary hiding (module Dec)
+open import Relation.Nullary
 open import Relation.Nullary.Decidable as Dec using (True)
 
 ------------------------------------------------------------------------
