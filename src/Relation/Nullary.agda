@@ -8,10 +8,10 @@
 
 module Relation.Nullary where
 
-open import Agda.Builtin.Bool
-open import Agda.Builtin.Sigma
+open import Data.Bool.Base
 open import Data.Empty hiding (⊥-elim)
 open import Data.Empty.Irrelevant
+open import Data.Product.Core
 open import Level
 
 -- Negation.
