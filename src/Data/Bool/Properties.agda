@@ -6,7 +6,7 @@
 
 module Data.Bool.Properties where
 
-open import Data.Bool
+open import Data.Bool.Base
 open import Function
 open import Function.Equality using (_⟨$⟩_)
 open import Function.Equivalence
@@ -14,14 +14,30 @@ open import Function.Equivalence
 open import Algebra
 import Algebra.RingSolver.Simple as Solver
 import Algebra.RingSolver.AlmostCommutativeRing as ACR
-open import Relation.Binary.PropositionalEquality
-  hiding ([_]; proof-irrelevance)
+open import Relation.Binary.PropositionalEquality as PropEq
+  hiding ([_]; proof-irrelevance; decSetoid)
 open ≡-Reasoning
 open import Algebra.FunctionProperties (_≡_ {A = Bool})
 open import Algebra.Structures (_≡_ {A = Bool})
 open import Data.Product
 open import Data.Sum
 open import Data.Empty
+open import Relation.Nullary
+open import Relation.Binary
+
+------------------------------------------------------------------------
+-- Testing for equality
+
+infix 4 _≟_
+
+_≟_ : Decidable {A = Bool} _≡_
+true  ≟ true  = yes refl
+false ≟ false = yes refl
+true  ≟ false = no λ()
+false ≟ true  = no λ()
+
+decSetoid : DecSetoid _ _
+decSetoid = PropEq.decSetoid _≟_
 
 ------------------------------------------------------------------------
 -- Properties of _∨_
