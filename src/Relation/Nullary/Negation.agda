@@ -7,7 +7,7 @@
 module Relation.Nullary.Negation where
 
 open import Category.Monad
-open import Data.Bool.Base using (Bool; false; true; if_then_else_)
+open import Data.Bool.Base using (Bool; false; true; if_then_else_; not)
 open import Data.Empty
 open import Data.Product as Prod
 open import Data.Sum as Sum using (_⊎_; inj₁; inj₂; [_,_])
@@ -34,8 +34,9 @@ private
 -- If we can decide P, then we can decide its negation.
 
 ¬? : ∀ {p} {P : Set p} → Dec P → Dec (¬ P)
-¬? (yes p) = no (λ ¬p → ¬p p)
-¬? (no ¬p) = yes ¬p
+¬? p? .proj₁ = not (p? .proj₁)
+¬? (yes p) .proj₂ = false (λ ¬p → ¬p p)
+¬? (no ¬p) .proj₂ = true ¬p
 
 ------------------------------------------------------------------------
 -- Quantifier juggling
@@ -89,8 +90,9 @@ decidable-stable (yes p) ¬¬p = p
 decidable-stable (no ¬p) ¬¬p = ⊥-elim (¬¬p ¬p)
 
 ¬-drop-Dec : ∀ {p} {P : Set p} → Dec (¬ ¬ P) → Dec (¬ P)
-¬-drop-Dec (yes ¬¬p) = no ¬¬p
-¬-drop-Dec (no ¬¬¬p) = yes (negated-stable ¬¬¬p)
+¬-drop-Dec ¬¬p? .proj₁ = not (¬¬p? .proj₁)
+¬-drop-Dec (yes ¬¬p) .proj₂ = false ¬¬p
+¬-drop-Dec (no ¬¬¬p) .proj₂ = true (negated-stable ¬¬¬p)
 
 -- Double-negation is a monad (if we assume that all elements of ¬ ¬ P
 -- are equal).
