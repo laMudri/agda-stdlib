@@ -82,24 +82,37 @@ module _ {a₁ a₂ b₁ b₂} {A : Setoid a₁ a₂} {B : Setoid b₁ b₂} whe
     map′ (Injection.injective inj) (Π.cong (to inj))
          (dec (to inj ⟨$⟩ x) (to inj ⟨$⟩ y))
 
--- If a decision procedure returns "yes", then we can extract the
--- proof using from-yes.
+module _ {p} {P : Set p} where
 
-From-yes : ∀ {p} {P : Set p} → Dec P → Set p
-From-yes {P = P} (true  , _) = P
-From-yes         (false , _) = Lift ⊤
+  -- If a decision procedure returns "yes", then we can extract the
+  -- proof using from-yes.
 
-from-yes : ∀ {p} {P : Set p} (p : Dec P) → From-yes p
-from-yes (true  , true p) = p
-from-yes (false , _     ) = _
+  From-yes : Dec P → Set p
+  From-yes (true  , _) = P
+  From-yes (false , _) = Lift ⊤
 
--- If a decision procedure returns "no", then we can extract the proof
--- using from-no.
+  from-yes : (p : Dec P) → From-yes p
+  from-yes (yes     p) = p
+  from-yes (false , _) = _
 
-From-no : ∀ {p} {P : Set p} → Dec P → Set p
-From-no {P = P} (false , _) = ¬ P
-From-no         (true  , _) = Lift ⊤
+  -- If a decision procedure returns "no", then we can extract the proof
+  -- using from-no.
 
-from-no : ∀ {p} {P : Set p} (p : Dec P) → From-no p
-from-no (false , false ¬p) = ¬p
-from-no (true  , _       ) = _
+  From-no : Dec P → Set p
+  From-no (false , _) = ¬ P
+  From-no (true  , _) = Lift ⊤
+
+  from-no : (p : Dec P) → From-no p
+  from-no (no    ¬p) = ¬p
+  from-no (true , _) = _
+
+  -- If we know whether the thing we're deciding is true, we can say
+  -- what the result of the decision will be.
+
+  P⇒≡true : (P? : Dec P) → P → proj₁ P? ≡ true
+  P⇒≡true (true , _) _ = refl
+  P⇒≡true (no    ¬p) p = ⊥-elim (¬p p)
+
+  ¬P⇒≡false : (P? : Dec P) → ¬ P → proj₁ P? ≡ false
+  ¬P⇒≡false (false , _)  _ = refl
+  ¬P⇒≡false (yes     p) ¬p = ⊥-elim (¬p p)
