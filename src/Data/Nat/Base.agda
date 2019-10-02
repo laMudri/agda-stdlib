@@ -10,9 +10,10 @@ import Level using (zero)
 open import Function using (_∘_)
 open import Relation.Binary
 open import Relation.Binary.Core
-open import Relation.Binary.PropositionalEquality.Core
+open import Relation.Binary.PropositionalEquality
 import Relation.Binary.PropositionalEquality.TrustMe as TrustMe
-open import Relation.Nullary using (¬_; Dec; yes; no)
+open import Relation.Nullary
+open import Relation.Nullary.Decidable using (map′)
 
 infix 4 _≤_ _<_ _≥_ _>_ _≰_ _≮_ _≱_ _≯_
 
@@ -144,9 +145,8 @@ infix 4 _≟_ _≤?_
 
 _≟_ : Decidable {A = ℕ} _≡_
 zero  ≟ zero   = yes refl
-suc m ≟ suc n  with m ≟ n
-suc m ≟ suc .m | yes refl = yes refl
-suc m ≟ suc n  | no prf   = no (prf ∘ (λ p → subst (λ x → m ≡ pred x) p refl))
+suc m ≟ suc n  =
+  map′ (cong suc) (λ p → subst (λ x → m ≡ pred x) p refl) (m ≟ n)
 zero  ≟ suc n  = no λ()
 suc m ≟ zero   = no λ()
 
@@ -156,9 +156,7 @@ suc m ≟ zero   = no λ()
 _≤?_ : Decidable _≤_
 zero  ≤? _     = yes z≤n
 suc m ≤? zero  = no λ()
-suc m ≤? suc n with m ≤? n
-...            | yes m≤n = yes (s≤s m≤n)
-...            | no  m≰n = no  (m≰n ∘ ≤-pred)
+suc m ≤? suc n = map′ s≤s ≤-pred (m ≤? n)
 
 -- A comparison view. Taken from "View from the left"
 -- (McBride/McKinna); details may differ.

@@ -10,6 +10,7 @@
 
 module Data.Graph.Acyclic where
 
+open import Data.Bool.Base using (Bool; true; false)
 open import Data.Nat.Base as Nat using (ℕ; zero; suc; _<′_)
 import Data.Nat.Properties as Nat
 open import Data.Fin as Fin
@@ -225,7 +226,7 @@ preds (c & g) (suc i) =
   p : ∀ {E : Set} {n} (i : Fin n) → E × Fin n → Maybe (Fin′ (suc i) × E)
   p i (e , j)  with i ≟ j
   p i (e , .i) | yes P.refl = just (zero , e)
-  p i (e , j)  | no _       = nothing
+  p i (e , j)  | false , _  = nothing
 
 private
 

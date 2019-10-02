@@ -13,7 +13,7 @@ module Data.List.Membership.Propositional.Properties where
 open import Algebra using (CommutativeSemiring)
 open import Algebra.FunctionProperties using (Op₂; Selective)
 open import Category.Monad using (RawMonad)
-open import Data.Bool.Base using (Bool; false; true; T)
+open import Data.Bool.Base using (Bool; false; true; T; if_then_else_)
 open import Data.Fin using (Fin)
 open import Function
 open import Function.Equality using (_⟨$⟩_)
@@ -279,9 +279,9 @@ module _ {a} {A : Set a} where
     helper (yes (i , fᵢ≡x)) = finite f′-inj xs f′ⱼ∈xs
       where
       f′ : ℕ → A
-      f′ j with i ≤? j
-      ... | yes i≤j = f (suc j)
-      ... | no  i≰j = f j
+      f′ j = if proj₁ (i ≤? j)
+        then f (suc j)
+        else f j
 
       ∈-if-not-i : ∀ {j} → i ≢ j → f j ∈ xs
       ∈-if-not-i i≢j = not-x (i≢j ∘ f-inj ∘ trans fᵢ≡x ∘ sym)
@@ -296,10 +296,10 @@ module _ {a} {A : Set a} where
 
       f′-injective′ : Injective {B = P.setoid A} (→-to-⟶ f′)
       f′-injective′ {j} {k} eq with i ≤? j | i ≤? k
-      ... | yes _   | yes _   = cong pred (f-inj eq)
-      ... | yes i≤j | no  i≰k = contradiction (f-inj eq) (lemma i≤j i≰k)
-      ... | no  i≰j | yes i≤k = contradiction (f-inj eq) (lemma i≤k i≰j ∘ sym)
-      ... | no  _   | no  _   = f-inj eq
+      ... | true  , _ | true  , _ = cong pred (f-inj eq)
+      ... | false , _ | false , _ = f-inj eq
+      ... | yes i≤j   | no  i≰k   = contradiction (f-inj eq) (lemma i≤j i≰k)
+      ... | no  i≰j   | yes i≤k   = contradiction (f-inj eq) (lemma i≤k i≰j ∘ sym)
 
       f′-inj = record
         { to        = →-to-⟶ f′

@@ -16,7 +16,7 @@ open import Data.Nat as ℕ
 open import Function using (_∘_; _on_)
 open import Level using () renaming (zero to ℓ₀)
 open import Relation.Nullary using (yes; no)
-open import Relation.Nullary.Decidable using (True; toWitness)
+open import Relation.Nullary.Decidable using (True; toWitness; map′)
 open import Relation.Binary
 open import Relation.Binary.PropositionalEquality
   using (_≡_; _≢_; refl; cong)
@@ -211,9 +211,7 @@ _≟_ : {n : ℕ} → Decidable {A = Fin n} _≡_
 zero  ≟ zero  = yes refl
 zero  ≟ suc y = no λ()
 suc x ≟ zero  = no λ()
-suc x ≟ suc y with x ≟ y
-... | yes x≡y = yes (cong suc x≡y)
-... | no  x≢y = no (λ {refl → x≢y refl})
+suc x ≟ suc y = map′ (cong suc) (λ { refl → refl }) (x ≟ y)
 
 ------------------------------------------------------------------------
 -- Order relations

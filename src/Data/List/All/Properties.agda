@@ -6,7 +6,7 @@
 
 module Data.List.All.Properties where
 
-open import Data.Bool.Base using (Bool; T)
+open import Data.Bool.Base using (Bool; T; true; false)
 open import Data.Bool.Properties
 open import Data.Empty
 open import Data.Fin using (Fin) renaming (zero to fzero; suc to fsuc)
@@ -18,7 +18,7 @@ open import Data.List.Relation.Pointwise using (Pointwise; []; _∷_)
 open import Data.List.Relation.Sublist.Propositional using (_⊆_)
 open import Data.Maybe as Maybe using (Maybe; just; nothing)
 open import Data.Nat using (zero; suc; z≤n; s≤s; _<_)
-open import Data.Product as Prod using (_×_; _,_; uncurry; uncurry′)
+open import Data.Product as Prod using (_×_; _,_; uncurry; uncurry′; proj₁)
 open import Function
 open import Function.Equality using (_⟨$⟩_)
 open import Function.Equivalence using (_⇔_; module Equivalence)
@@ -255,15 +255,15 @@ module _ {a p} {A : Set a} {P : A → Set p} (P? : Decidable P) where
   filter⁺₁ : ∀ xs → All P (filter P? xs)
   filter⁺₁ []       = []
   filter⁺₁ (x ∷ xs) with P? x
-  ... | yes Px = Px ∷ filter⁺₁ xs
-  ... | no  _  = filter⁺₁ xs
+  ... | yes Px     = Px ∷ filter⁺₁ xs
+  ... | false , _  = filter⁺₁ xs
 
   filter⁺₂ : ∀ {q} {Q : A → Set q} {xs} →
              All Q xs → All Q (filter P? xs)
   filter⁺₂ {xs = _}     [] = []
-  filter⁺₂ {xs = x ∷ _} (Qx ∷ Qxs) with P? x
-  ... | no  _ = filter⁺₂ Qxs
-  ... | yes _ = Qx ∷ filter⁺₂ Qxs
+  filter⁺₂ {xs = x ∷ _} (Qx ∷ Qxs) with proj₁ (P? x)
+  ... | false = filter⁺₂ Qxs
+  ... | true  = Qx ∷ filter⁺₂ Qxs
 
 ------------------------------------------------------------------------
 -- zipWith

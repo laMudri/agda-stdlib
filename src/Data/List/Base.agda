@@ -12,7 +12,7 @@ open import Data.Sum as Sum using (_⊎_; inj₁; inj₂)
 open import Data.Bool.Base
   using (Bool; false; true; not; _∧_; _∨_; if_then_else_)
 open import Data.Maybe.Base using (Maybe; nothing; just)
-open import Data.Product as Prod using (_×_; _,_)
+open import Data.Product as Prod using (_×_; _,_; proj₁; proj₂)
 open import Function using (id; _∘_)
 open import Relation.Nullary using (yes; no)
 open import Relation.Unary using (Pred; Decidable)
@@ -207,37 +207,38 @@ splitAt (suc n) (x ∷ xs) with splitAt n xs
 takeWhile : ∀ {a p} {A : Set a} {P : Pred A p} →
             Decidable P → List A → List A
 takeWhile P? []       = []
-takeWhile P? (x ∷ xs) with P? x
-... | yes _ = x ∷ takeWhile P? xs
-... | no  _ = []
+takeWhile P? (x ∷ xs) = if proj₁ (P? x)
+  then x ∷ takeWhile P? xs
+  else []
 
 dropWhile : ∀ {a p} {A : Set a} {P : Pred A p} →
             Decidable P → List A → List A
 dropWhile P? []       = []
-dropWhile P? (x ∷ xs) with P? x
-... | yes _ = dropWhile P? xs
-... | no  _ = x ∷ xs
+dropWhile P? (x ∷ xs) = if proj₁ (P? x)
+  then dropWhile P? xs
+  else x ∷ xs
 
 filter : ∀ {a p} {A : Set a} {P : Pred A p} →
          Decidable P → List A → List A
 filter P? [] = []
-filter P? (x ∷ xs) with P? x
-... | no  _ = filter P? xs
-... | yes _ = x ∷ filter P? xs
+filter P? (x ∷ xs) = if proj₁ (P? x)
+  then x ∷ filter P? xs
+  else filter P? xs
 
 partition : ∀ {a p} {A : Set a} {P : Pred A p} →
             Decidable P → List A → (List A × List A)
 partition P? []       = ([] , [])
-partition P? (x ∷ xs) with P? x | partition P? xs
-... | yes _ | (ys , zs) = (x ∷ ys , zs)
-... | no  _ | (ys , zs) = (ys , x ∷ zs)
+partition P? (x ∷ xs) with partition P? xs
+... | (ys , zs) = if proj₁ (P? x)
+  then (x ∷ ys , zs)
+  else (ys , x ∷ zs)
 
 span : ∀ {a p} {A : Set a} {P : Pred A p} →
        Decidable P → List A → (List A × List A)
 span P? []       = ([] , [])
-span P? (x ∷ xs) with P? x
-... | yes _ = Prod.map (x ∷_) id (span P? xs)
-... | no  _ = ([] , x ∷ xs)
+span P? (x ∷ xs) = if proj₁ (P? x)
+  then Prod.map (x ∷_) id (span P? xs)
+  else ([] , x ∷ xs)
 
 break : ∀ {a p} {A : Set a} {P : Pred A p} →
         Decidable P → List A → (List A × List A)

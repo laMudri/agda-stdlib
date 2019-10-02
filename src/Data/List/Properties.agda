@@ -469,15 +469,15 @@ module _ {a p} {A : Set a} {P : Pred A p} (P? : Decidable P) where
 
   takeWhile++dropWhile : ∀ xs → takeWhile P? xs ++ dropWhile P? xs ≡ xs
   takeWhile++dropWhile []       = refl
-  takeWhile++dropWhile (x ∷ xs) with P? x
-  ... | yes _ = P.cong (x ∷_) (takeWhile++dropWhile xs)
-  ... | no  _ = refl
+  takeWhile++dropWhile (x ∷ xs) with proj₁ (P? x)
+  ... | true  = P.cong (x ∷_) (takeWhile++dropWhile xs)
+  ... | false = refl
 
   span-defn : span P? ≗ < takeWhile P? , dropWhile P? >
   span-defn []       = refl
-  span-defn (x ∷ xs) with P? x
-  ... | yes _ = P.cong (Prod.map (x ∷_) id) (span-defn xs)
-  ... | no  _ = refl
+  span-defn (x ∷ xs) with proj₁ (P? x)
+  ... | true  = P.cong (Prod.map (x ∷_) id) (span-defn xs)
+  ... | false = refl
 
 ------------------------------------------------------------------------
 -- filter
@@ -486,45 +486,45 @@ module _ {a p} {A : Set a} {P : A → Set p} (P? : Decidable P) where
 
   length-filter : ∀ xs → length (filter P? xs) ≤ length xs
   length-filter []       = z≤n
-  length-filter (x ∷ xs) with P? x
-  ... | no  _ = ≤-step (length-filter xs)
-  ... | yes _ = s≤s (length-filter xs)
+  length-filter (x ∷ xs) with proj₁ (P? x)
+  ... | false = ≤-step (length-filter xs)
+  ... | true  = s≤s (length-filter xs)
 
   filter-all : ∀ {xs} → All P xs → filter P? xs ≡ xs
   filter-all {[]}     []         = refl
   filter-all {x ∷ xs} (px ∷ pxs) with P? x
-  ... | no  ¬px = contradiction px ¬px
-  ... | yes _   = P.cong (x ∷_) (filter-all pxs)
+  ... | no   ¬px = contradiction px ¬px
+  ... | true , _ = P.cong (x ∷_) (filter-all pxs)
 
   filter-notAll : ∀ xs → Any (∁ P) xs → length (filter P? xs) < length xs
   filter-notAll [] ()
   filter-notAll (x ∷ xs) (here ¬px) with P? x
-  ... | no  _  = s≤s (length-filter xs)
-  ... | yes px = contradiction px ¬px
-  filter-notAll (x ∷ xs) (there any) with P? x
-  ... | no  _ = ≤-step (filter-notAll xs any)
-  ... | yes _ = s≤s (filter-notAll xs any)
+  ... | false , _ = s≤s (length-filter xs)
+  ... | yes    px = contradiction px ¬px
+  filter-notAll (x ∷ xs) (there any) with proj₁ (P? x)
+  ... | false = ≤-step (filter-notAll xs any)
+  ... | true  = s≤s (filter-notAll xs any)
 
   filter-some : ∀ {xs} → Any P xs → 0 < length (filter P? xs)
   filter-some {x ∷ xs} (here px)   with P? x
-  ... | yes _  = s≤s z≤n
-  ... | no ¬px = contradiction px ¬px
-  filter-some {x ∷ xs} (there pxs) with P? x
-  ... | yes _ = ≤-step (filter-some pxs)
-  ... | no  _ = filter-some pxs
+  ... | true , _  = s≤s z≤n
+  ... | no   ¬px = contradiction px ¬px
+  filter-some {x ∷ xs} (there pxs) with proj₁ (P? x)
+  ... | true  = ≤-step (filter-some pxs)
+  ... | false = filter-some pxs
 
   filter-none : ∀ {xs} → All (∁ P) xs → filter P? xs ≡ []
   filter-none {[]}     []           = refl
   filter-none {x ∷ xs} (¬px ∷ ¬pxs) with P? x
-  ... | no  _  = filter-none ¬pxs
-  ... | yes px = contradiction px ¬px
+  ... | false , _ = filter-none ¬pxs
+  ... | yes    px = contradiction px ¬px
 
   filter-complete : ∀ {xs} → length (filter P? xs) ≡ length xs →
                     filter P? xs ≡ xs
   filter-complete {[]}     eq = refl
-  filter-complete {x ∷ xs} eq with P? x
-  ... | no ¬px = contradiction eq (<⇒≢ (s≤s (length-filter xs)))
-  ... | yes px = P.cong (x ∷_) (filter-complete (suc-injective eq))
+  filter-complete {x ∷ xs} eq with proj₁ (P? x)
+  ... | false = contradiction eq (<⇒≢ (s≤s (length-filter xs)))
+  ... | true  = P.cong (x ∷_) (filter-complete (suc-injective eq))
 
 ------------------------------------------------------------------------
 -- partition
@@ -533,9 +533,9 @@ module _ {a p} {A : Set a} {P : A → Set p} (P? : Decidable P) where
 
   partition-defn : partition P? ≗ < filter P? , filter (∁? P?) >
   partition-defn []       = refl
-  partition-defn (x ∷ xs) with P? x
-  ...  | yes Px = P.cong (Prod.map (x ∷_) id) (partition-defn xs)
-  ...  | no ¬Px = P.cong (Prod.map id (x ∷_)) (partition-defn xs)
+  partition-defn (x ∷ xs) with proj₁ (P? x)
+  ...  | true  = P.cong (Prod.map (x ∷_) id) (partition-defn xs)
+  ...  | false = P.cong (Prod.map id (x ∷_)) (partition-defn xs)
 
 ------------------------------------------------------------------------
 -- reverse
@@ -689,5 +689,5 @@ module _ {a p} {A : Set a} (P : A → Set p) (P? : Decidable P) where
   boolFilter-filters : ∀ xs → All P (boolFilter (⌊_⌋ ∘ P?) xs)
   boolFilter-filters []       = []
   boolFilter-filters (x ∷ xs) with P? x
-  ... | yes px = px ∷ boolFilter-filters xs
-  ... | no ¬px = boolFilter-filters xs
+  ... | yes    px = px ∷ boolFilter-filters xs
+  ... | false , _ = boolFilter-filters xs

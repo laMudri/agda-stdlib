@@ -17,7 +17,7 @@ import Data.List.Membership.Setoid.Properties as MembershipP
 open import Data.List.Membership.Setoid.Properties
 import Data.List.Relation.Sublist.Setoid as Sublist
 import Data.List.Relation.Equality.Setoid as Equality
-open import Data.Product as Prod using ()
+open import Data.Product as Prod using (proj₁)
 open import Function using (_∘_; _∘′_; id)
 open import Function.Equality using (_⟨$⟩_)
 open import Function.Inverse as Inv using (_↔_; module Inverse)
@@ -77,8 +77,8 @@ module _ {a p ℓ} (S : Setoid a ℓ)
 
   filter⁺ : ∀ xs → filter P? xs ⊆ xs
   filter⁺ []       ()
-  filter⁺ (x ∷ xs) y∈f[x∷xs] with P? x
-  ... | no  _ = there (filter⁺ xs y∈f[x∷xs])
-  ... | yes _ with y∈f[x∷xs]
+  filter⁺ (x ∷ xs) y∈f[x∷xs] with proj₁ (P? x)
+  ... | false = there (filter⁺ xs y∈f[x∷xs])
+  ... | true  with y∈f[x∷xs]
   ...   | here  y≈x     = here y≈x
   ...   | there y∈f[xs] = there (filter⁺ xs y∈f[xs])

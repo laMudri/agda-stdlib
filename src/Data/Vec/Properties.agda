@@ -7,6 +7,7 @@
 module Data.Vec.Properties where
 
 open import Algebra.FunctionProperties
+open import Data.Bool.Base using (Bool; true; false)
 open import Data.Empty using (⊥-elim)
 open import Data.Fin as Fin using (Fin; zero; suc; toℕ; fromℕ)
 open import Data.Fin.Properties using (_+′_)
@@ -578,9 +579,9 @@ module _ {a p} {A : Set a} {P : Pred A p} (P? : Decidable P) where
 
   count≤n : ∀ {n} (xs : Vec A n) → count P? xs ≤ n
   count≤n []       = z≤n
-  count≤n (x ∷ xs) with P? x
-  ... | yes _ = s≤s (count≤n xs)
-  ... | no  _ = ≤-step (count≤n xs)
+  count≤n (x ∷ xs) with proj₁ (P? x)
+  ... | true  = s≤s (count≤n xs)
+  ... | false = ≤-step (count≤n xs)
 
 ------------------------------------------------------------------------
 -- insert

@@ -27,6 +27,7 @@ just-injective refl = refl
 -- Some operations
 
 open import Data.Bool.Base using (Bool; true; false; not)
+open import Data.Product using (_,_)
 open import Data.Unit.Base using (⊤)
 open import Relation.Nullary
 
@@ -42,8 +43,8 @@ is-nothing : ∀ {a} {A : Set a} → Maybe A → Bool
 is-nothing = not ∘ is-just
 
 decToMaybe : ∀ {a} {A : Set a} → Dec A → Maybe A
-decToMaybe (yes x) = just x
-decToMaybe (no _)  = nothing
+decToMaybe (yes     x) = just x
+decToMaybe (false , _) = nothing
 
 -- A dependent eliminator.
 

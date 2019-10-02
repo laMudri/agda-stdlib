@@ -6,13 +6,13 @@
 
 module Data.Vec where
 
-open import Data.Nat
+open import Data.Bool.Base using (Bool; true; false; if_then_else_)
 open import Data.Fin using (Fin; zero; suc)
 open import Data.List.Base as List using (List)
-open import Data.Product as Prod using (∃; ∃₂; _×_; _,_)
+open import Data.Nat
+open import Data.Product as Prod using (∃; ∃₂; _×_; _,_; proj₁)
 open import Function
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
-open import Relation.Nullary using (yes; no)
 open import Relation.Unary using (Pred; Decidable)
 
 ------------------------------------------------------------------------
@@ -164,9 +164,9 @@ sum = foldr _ _+_ 0
 count : ∀ {a p} {A : Set a} {P : Pred A p} → Decidable P →
         ∀ {n} → Vec A n → ℕ
 count P? []       = zero
-count P? (x ∷ xs) with P? x
-... | yes _ = suc (count P? xs)
-... | no  _ = count P? xs
+count P? (x ∷ xs) = if proj₁ (P? x)
+  then suc (count P? xs)
+  else count P? xs
 
 ------------------------------------------------------------------------
 -- Operations for building vectors

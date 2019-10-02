@@ -20,7 +20,6 @@ import Data.Vec.Properties as VP
 open import Function using (_∘_; flip)
 open import Function.Inverse using (Inverse)
 open import Relation.Binary.PropositionalEquality as P using (_≡_)
-open import Relation.Nullary using (yes; no)
 
 module _ {a} {A : Set a} where
 
@@ -66,6 +65,6 @@ module _ {a} {A : Set a} where
   -- Selecting from any table is the same as selecting from a constant table.
 
   select-const : ∀ {n} (z : A) (i : Fin n) t → select z i t ≗ select z i (replicate (lookup t i))
-  select-const z i t j with j ≟ i
-  ... | yes _ = P.refl
-  ... | no  _ = P.refl
+  select-const z i t j with proj₁ (j ≟ i)
+  ... | true  = P.refl
+  ... | false = P.refl
